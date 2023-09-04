@@ -107,18 +107,6 @@ class Grua:
         self.grua = self.lienzo.create_oval(self.X_Inicial, self.Y_Inicial, self.X_Final, self.Y_Final, width=1, fill="red")
         #self.mover_Grua()
 
-    """
-    # Crea la Matriz 1.
-    def crear_Matriz_1(self):
-        for fila_Matriz1 in range(self.tam_Matriz1):
-            for col_Matriz1 in range(self.tam_Matriz1):
-                x0 = col_Matriz1 * self.tam_Celdas_Suministro
-                y0 = fila_Matriz1 * self.tam_Celdas_Suministro
-                x1 = x0 + self.tam_Celdas_Suministro
-                y1 = y0 + self.tam_Celdas_Suministro
-                self.matriz1[fila_Matriz1][col_Matriz1] = self.lienzo.create_rectangle(x0, y0, x1, y1, fill="#B2B2B2")
-    """
-
     # Crea la Matriz 1.
     def crear_Matriz_1(self):
         for fila_Matriz1 in range(self.tamY_Matriz1):
