@@ -46,6 +46,9 @@ class Grua:
         self.boton_Volver = tk.Button(ventana, text="Volver a pantalla principal", command=self.volver_Inicio)
         self.boton_Volver.pack(side="top")
 
+        self.i = 0
+        self.j = 0
+
         self.boton_Iniciar = tk.Button(ventana, text="Iniciar Acomodo", command=self.detectar_Cajas)
         self.boton_Iniciar.pack(side="top")
 
@@ -98,8 +101,8 @@ class Grua:
         #[116,116],[156,116]
         
         # Crea el objeto representativo de la grúa.
-        self.velocidad_X = 2
-        self.velocidad_Y = 2
+        self.velocidad_X = 1
+        self.velocidad_Y = 1
         
         """
         self.X_Inicial = self.tam_Bases + (self.tam_Esp_Libre/2) - self.radio
@@ -207,88 +210,132 @@ class Grua:
             
     def detectar_Cajas(self):
 
-        x0 = self.espacios_Matriz1[0][0]
-        y0 = self.espacios_Matriz1[0][1]
         
-        self.mover_Grua_X(x0,y0)
-        
+        #self.x = self.espacios_Matriz1[0][0]
+        #self.y = self.espacios_Matriz1[0][1]
+        #self.mover_Grua_X()
+    
+        if (self.letras_Suministro1[self.i] == self.letras_Carga[self.j]):
 
-        """
+            self.x = self.espacios_Matriz1[self.i][0]
+            self.y = self.espacios_Matriz1[self.i][1]
+
+            # Ejecuta el movimiento en X primero.
+            self.mover_Grua_X()
+
+            self.actualizar_Suministro1()
+
+            self.x = self.espacios_Matriz1[self.j][0]
+            self.y = self.espacios_Matriz1[self.j][1]
+
+            # Ejecuta el movimiento en X primero.
+            self.mover_Grua_X()
+            #self.actualizar_Carga(self.letras_Carga[j])
+        
+        if self.j == len(self.letras_Carga)-1:
+            self.j = 0
+            self.i += 1
+        
+        if self.i == len(self.letras_Suministro1)-1:
+            return
+        
+        self.j += 1
+        self.detectar_Cajas()
+        
+    
+    """
+        while i < len(self.letras_Suministro1):
+            while j < len(self.letras_Carga):
+                if (self.letras_Suministro1[i] == self.letras_Carga[j]):
+
+                    self.x = self.espacios_Matriz1[i][0]
+                    self.y = self.espacios_Matriz1[i][1]
+
+                    # Ejecuta el movimiento en X primero.
+                    self.mover_Grua_X()
+
+                    #self.actualizar_Suministro1()
+                    #self.actualizar_Carga(self.letras_Carga[j])
+                j += 1
+            i += 1
+            j = 0
+
+    
         for pos_Sum1, elem_Sum1 in enumerate(self.letras_Suministro1):
             for pos_Carga, elem_Carga in enumerate(self.letras_Carga):
                 if (elem_Sum1 == elem_Carga):
-                    x0 = self.espacios_Matriz1[pos_Sum1][0]
-                    y0 = self.espacios_Matriz1[pos_Sum1][1]
-                    
-                    self.mover_Grua(x0,y0)
-                    #self.ventana.after(100, self.mover_Grua(x0,y0))
-                   
-                    #self.actualizar_Color(x0,y0)
+                    self.x = self.espacios_Matriz1[i][0]
+                    self.y = self.espacios_Matriz1[i][1]
 
-                    #self.matriz1[0][0]
-                    #self.ventana.after(500, self.actualizar_Color(x0,y0))
-                    #time.sleep(0.01)
-        """
+                    # Ejecuta el movimiento en X primero.
+                    self.mover_Grua_X()
 
-    def actualizar_Color(self, x0, y0):
+                    self.actualizar_Suministro1()
+                    #self.actualizar_Carga(self.letras_Carga[j])
+    """
+
+    def actualizar_Suministro1(self):
         # Actualiza la matriz de la zona de Suministro 1.
-        self.lienzo.create_rectangle(x0, y0, x0 + 40, y0 + 40, fill="white")
+        self.lienzo.create_rectangle(self.x, self.y, self.x + 40, self.y + 40, fill="white")
 
-        self.grua = self.lienzo.create_oval(x0, y0, x0 + 40, y0 + 40, width=1, fill="orange")
-        #time.sleep(0.01)
+        #self.grua = self.lienzo.create_oval(x0, y0, x0 + 40, y0 + 40, width=1, fill="orange")
+    
+    def actualizar_Carga(self, letra):
+
+        if letra == "R":  # Rojo Claro.
+            color = "#FF0000"
+
+        elif letra == "G":  # Verde Claro.
+            color = "#00FF00"
+
+        elif letra == "B":  # Azul Claro.
+            color = "#0000FF"
+
+        # Actualiza la matriz de la zona de Suministro 1.
+        self.lienzo.create_rectangle(self.x, self.y, self.x + 40, self.y + 40, fill=color)
+
+        #self.grua = self.lienzo.create_oval(x0, y0, x0 + 40, y0 + 40, width=1, fill="orange")
 
     # Mover la grúa en dirección Horizontal.
-    def mover_Grua_X(self, x0, y0):
+    def mover_Grua_X(self):
 
         self.lienzo.move(self.grua, self.velocidad_X, 0)
-        
+
         # Movimiento hacia la derecha.
-        if (self.X_Inicial < x0):
-            self.X_Inicial += self.velocidad_X
-            #while (self.X_Inicial != x0):
+        if (self.X_Inicial < self.x):
+            self.velocidad_X = self.velocidad_X
 
         # Movimiento hacia la izquierda.
-        else:
-            self.X_Inicial -= self.velocidad_X
-            #while (self.X_Inicial != x0):
-
-        if (self.X_Inicial != x0):
-            self.ventana.after(20, self.mover_Grua_X(x0, y0))
-        else:
-            self.mover_Grua_Y(x0,y0)
+        if (self.X_Inicial > self.x):
+            self.velocidad_X = -self.velocidad_X
             
+        if (self.X_Inicial == self.x):
+            self.mover_Grua_Y()
+            return
 
-    # Mover la grúa en dirección Vertical.
-    def mover_Grua_Y(self, x0, y0):
-        
-        self.lienzo.move(self.grua, 0, self.velocidad_Y)
-        
-        # Movimiento hacia abajo.
-        if (self.Y_Inicial < y0):
-            self.Y_Inicial += self.velocidad_Y
-            #while (self.Y_Inicial != y0):
-
-        # Movimiento hacia arriba.
-        else:
-            self.Y_Inicial -= self.velocidad_Y
-            #while (self.Y_Inicial != y0):
-
-        if (self.Y_Inicial != y0):
-            self.ventana.after(20, self.mover_Grua_Y(x0, y0))
-        else:
-            self.actualizar_Color(x0, y0)
-        
-
-
-        """
-        self.lienzo.move(self.grua, self.velocidad_X, self.velocidad_Y)
         self.X_Inicial += self.velocidad_X
 
-        if self.X_Inicial + self.radio >= self.espacios_Matriz1[5][0] or self.X_Inicial - self.radio <= self.tam_Bases + (self.tam_Esp_Libre/2) - (2*self.radio):
-            self.velocidad_X = -self.velocidad_X
+        self.ventana.after(20, self.mover_Grua_X)
 
-        self.ventana.after(20, self.mover_Cajas)
-        """
+    # Mover la grúa en dirección Vertical.
+    def mover_Grua_Y(self):
+        
+        self.lienzo.move(self.grua, 0, self.velocidad_Y)
+
+        # Movimiento hacia la abajo.
+        if (self.Y_Inicial < self.y):
+            self.velocidad_Y = self.velocidad_Y
+
+        # Movimiento hacia la arriba. 
+        if (self.Y_Inicial > self.y):
+            self.velocidad_Y = -self.velocidad_Y
+
+        if (self.Y_Inicial == self.y):
+            return
+
+        self.Y_Inicial += self.velocidad_Y
+
+        self.ventana.after(20, self.mover_Grua_Y)
 
 if __name__ == "__main__":
     ventana = tk.Tk()
