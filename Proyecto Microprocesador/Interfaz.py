@@ -46,7 +46,7 @@ class Grua:
         self.boton_Volver = tk.Button(ventana, text="Volver a pantalla principal", command=self.volver_Inicio)
         self.boton_Volver.pack(side="top")
 
-        self.boton_Iniciar = tk.Button(ventana, text="Iniciar Acomodo", command=self.mover_Cajas)
+        self.boton_Iniciar = tk.Button(ventana, text="Iniciar Acomodo", command=self.detectar_Cajas)
         self.boton_Iniciar.pack(side="top")
 
         self.tamX_Matriz1 = 8  # Cantidad columnas de la zona de suministro 1.
@@ -98,14 +98,20 @@ class Grua:
         #[116,116],[156,116]
         
         # Crea el objeto representativo de la grúa.
-        self.radio = 10
         self.velocidad_X = 2
-        self.velocidad_Y = 0
+        self.velocidad_Y = 2
+        
+        """
         self.X_Inicial = self.tam_Bases + (self.tam_Esp_Libre/2) - self.radio
         self.Y_Inicial = self.tam_Bases + (self.tam_Esp_Libre/2) - self.radio
         self.X_Final = self.tam_Bases + (self.tam_Esp_Libre/2) + self.radio
         self.Y_Final = self.tam_Bases + (self.tam_Esp_Libre/2) + self.radio
-        self.grua = self.lienzo.create_oval(self.X_Inicial, self.Y_Inicial, self.X_Final, self.Y_Final, width=1, fill="red")
+        """
+        self.X_Inicial = self.tam_Bases
+        self.Y_Inicial = self.tam_Bases
+        self.X_Final = self.X_Inicial + self.tam_Celdas_Carga
+        self.Y_Final = self.Y_Inicial + self.tam_Celdas_Carga
+        self.grua = self.lienzo.create_oval(self.X_Inicial, self.Y_Inicial, self.X_Final, self.Y_Final, width=1, fill="orange")
 
     # Carga el archivo de excel de prueba para la interfaz y modifica los colores.
     def leer_Excel_Prueba(self):
@@ -199,22 +205,79 @@ class Grua:
             else:
                 return "white"
             
-    def mover_Cajas(self):
+    def detectar_Cajas(self):
+
+        x0 = self.espacios_Matriz1[0][0]
+        y0 = self.espacios_Matriz1[0][1]
+        
+        self.mover_Grua_X(x0,y0)
+        
+
+        """
         for pos_Sum1, elem_Sum1 in enumerate(self.letras_Suministro1):
             for pos_Carga, elem_Carga in enumerate(self.letras_Carga):
                 if (elem_Sum1 == elem_Carga):
                     x0 = self.espacios_Matriz1[pos_Sum1][0]
                     y0 = self.espacios_Matriz1[pos_Sum1][1]
-                    self.ventana.after(500, self.actualizar_Color(x0,y0))
+                    
+                    self.mover_Grua(x0,y0)
+                    #self.ventana.after(100, self.mover_Grua(x0,y0))
+                   
+                    #self.actualizar_Color(x0,y0)
+
+                    #self.matriz1[0][0]
+                    #self.ventana.after(500, self.actualizar_Color(x0,y0))
                     #time.sleep(0.01)
+        """
 
     def actualizar_Color(self, x0, y0):
+        # Actualiza la matriz de la zona de Suministro 1.
         self.lienzo.create_rectangle(x0, y0, x0 + 40, y0 + 40, fill="white")
 
+        self.grua = self.lienzo.create_oval(x0, y0, x0 + 40, y0 + 40, width=1, fill="orange")
+        #time.sleep(0.01)
 
+    # Mover la grúa en dirección Horizontal.
+    def mover_Grua_X(self, x0, y0):
 
+        self.lienzo.move(self.grua, self.velocidad_X, 0)
+        
+        # Movimiento hacia la derecha.
+        if (self.X_Inicial < x0):
+            self.X_Inicial += self.velocidad_X
+            #while (self.X_Inicial != x0):
 
+        # Movimiento hacia la izquierda.
+        else:
+            self.X_Inicial -= self.velocidad_X
+            #while (self.X_Inicial != x0):
 
+        if (self.X_Inicial != x0):
+            self.ventana.after(20, self.mover_Grua_X(x0, y0))
+        else:
+            self.mover_Grua_Y(x0,y0)
+            
+
+    # Mover la grúa en dirección Vertical.
+    def mover_Grua_Y(self, x0, y0):
+        
+        self.lienzo.move(self.grua, 0, self.velocidad_Y)
+        
+        # Movimiento hacia abajo.
+        if (self.Y_Inicial < y0):
+            self.Y_Inicial += self.velocidad_Y
+            #while (self.Y_Inicial != y0):
+
+        # Movimiento hacia arriba.
+        else:
+            self.Y_Inicial -= self.velocidad_Y
+            #while (self.Y_Inicial != y0):
+
+        if (self.Y_Inicial != y0):
+            self.ventana.after(20, self.mover_Grua_Y(x0, y0))
+        else:
+            self.actualizar_Color(x0, y0)
+        
 
 
         """
