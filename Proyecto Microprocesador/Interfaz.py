@@ -3,7 +3,7 @@ from tkinter import filedialog
 import openpyxl
 import time
 
-class Grua:
+class Interfaz:
     def __init__(self, ventana):
         self.ventana = ventana
         self.ventana.title("Grúa Pórtico")
@@ -110,11 +110,11 @@ class Grua:
         self.X_Final = self.tam_Bases + (self.tam_Esp_Libre/2) + self.radio
         self.Y_Final = self.tam_Bases + (self.tam_Esp_Libre/2) + self.radio
         """
-        self.X_Inicial = self.tam_Bases
-        self.Y_Inicial = self.tam_Bases
-        self.X_Final = self.X_Inicial + self.tam_Celdas_Carga
-        self.Y_Final = self.Y_Inicial + self.tam_Celdas_Carga
-        self.grua = self.lienzo.create_oval(self.X_Inicial, self.Y_Inicial, self.X_Final, self.Y_Final, width=1, fill="orange")
+        self.X_Actual = self.tam_Bases
+        self.Y_Actual = self.tam_Bases
+        self.Y_Final = self.X_Actual + self.tam_Celdas_Carga
+        self.Y_Final = self.Y_Actual + self.tam_Celdas_Carga
+        self.grua = self.lienzo.create_oval(self.X_Actual, self.Y_Actual, self.Y_Final, self.Y_Final, width=1, fill="orange")
 
     # Carga el archivo de excel de prueba para la interfaz y modifica los colores.
     def leer_Excel_Prueba(self):
@@ -177,10 +177,8 @@ class Grua:
                 y1 = y0 + self.tam_Celdas_Carga
                 color = self.ident_Color(letra_actual, self.letras_Carga)
                 letra_actual += 1
-                self.matriz3[fila_Matriz3][col_Matriz3] = self.lienzo.create_rectangle(x0, y0, x1, y1, fill=color)
+                self.matriz3[fila_Matriz3][col_Matriz3] = self.lienzo.create_rectangle(x0, y0, x1, y1, width=3, fill=color)
                 self.espacios_Matriz3.append([x0,y0])
-        
-        #self.matriz3[0][0] = self.lienzo.create_rectangle(fill="red")
 
     def volver_Inicio(self):
         self.lienzo.destroy()
@@ -209,74 +207,101 @@ class Grua:
                 return "white"
             
     def detectar_Cajas(self):
-
         
-        #self.x = self.espacios_Matriz1[0][0]
-        #self.y = self.espacios_Matriz1[0][1]
-        #self.mover_Grua_X()
-    
+        #listo = 0
+
         if (self.letras_Suministro1[self.i] == self.letras_Carga[self.j]):
 
-            self.x = self.espacios_Matriz1[self.i][0]
-            self.y = self.espacios_Matriz1[self.i][1]
+            self.X_Destino = self.espacios_Matriz1[self.i][0]
+            self.Y_Destino = self.espacios_Matriz1[self.i][1]
 
-            # Ejecuta el movimiento en X primero.
-            self.mover_Grua_X()
+            # Ejecuta el movimiento.
+            self.ventana.after(100, self.mover_Grua)
+            #self.mover_Grua()
 
-            self.actualizar_Suministro1()
+            #time.sleep(2)
 
-            self.x = self.espacios_Matriz1[self.j][0]
-            self.y = self.espacios_Matriz1[self.j][1]
+            self.ventana.after(100, self.actualizar_Suministro1)
+            #time.sleep(2)
 
-            # Ejecuta el movimiento en X primero.
-            self.mover_Grua_X()
-            #self.actualizar_Carga(self.letras_Carga[j])
+            self.X_Destino = self.espacios_Matriz3[self.j][0]
+            self.Y_Destino = self.espacios_Matriz3[self.j][1]
+
+            self.ventana.after(100, self.mover_Grua)
+            #time.sleep(2)
+
+            self.ventana.after(100, self.actualizar_Carga(self.letras_Carga[self.j]))
+            #time.sleep(2)
         
-        if self.j == len(self.letras_Carga)-1:
+        if self.j == len(self.letras_Carga)-2:
             self.j = 0
             self.i += 1
         
-        if self.i == len(self.letras_Suministro1)-1:
+        if self.i == len(self.letras_Suministro1):
             return
         
         self.j += 1
         self.detectar_Cajas()
+
+
+        """
+        self.X_Destino = self.espacios_Matriz1[2][0]
+        self.Y_Destino = self.espacios_Matriz1[2][1]
+        listo = self.mover_Grua_X()
+        #self.mover_Grua_Y()
         
-    
-    """
-        while i < len(self.letras_Suministro1):
-            while j < len(self.letras_Carga):
-                if (self.letras_Suministro1[i] == self.letras_Carga[j]):
+        if (listo == 1):
 
-                    self.x = self.espacios_Matriz1[i][0]
-                    self.y = self.espacios_Matriz1[i][1]
+            listo = 0
 
-                    # Ejecuta el movimiento en X primero.
-                    self.mover_Grua_X()
+            self.actualizar_Suministro1()
+            
+            self.X_Destino = self.espacios_Matriz3[1][0]
+            self.Y_Destino = self.espacios_Matriz3[1][1]
+            #self.ventana.after(1000, self.mover_Grua_X)
+            listo = self.mover_Grua_X()
 
-                    #self.actualizar_Suministro1()
-                    #self.actualizar_Carga(self.letras_Carga[j])
-                j += 1
-            i += 1
-            j = 0
+            #self.ventana.after_cancel(self.detectar_Cajas)
+            #self.mover_Grua_Y()
 
-    
+            #if (listo == 1):
+            #    self.actualizar_Carga(self.letras_Carga[1])
+
+        #self.ventana.after(20, self.detectar_Cajas)
+
+        """
+        """
         for pos_Sum1, elem_Sum1 in enumerate(self.letras_Suministro1):
             for pos_Carga, elem_Carga in enumerate(self.letras_Carga):
                 if (elem_Sum1 == elem_Carga):
-                    self.x = self.espacios_Matriz1[i][0]
-                    self.y = self.espacios_Matriz1[i][1]
+                    self.X_Destino = self.espacios_Matriz1[pos_Sum1][0]
+                    self.Y_Destino = self.espacios_Matriz1[pos_Sum1][1]
 
-                    # Ejecuta el movimiento en X primero.
-                    self.mover_Grua_X()
+                    # Ejecuta el movimiento.
+                    self.ventana.after(100, self.mover_Grua)
+                    #self.mover_Grua()
 
-                    self.actualizar_Suministro1()
-                    #self.actualizar_Carga(self.letras_Carga[j])
-    """
+                    #time.sleep(2)
+
+                    #if (listo == 1):
+
+                    self.ventana.after(100, self.actualizar_Suministro1)
+                    #time.sleep(2)
+
+                    self.X_Destino = self.espacios_Matriz3[pos_Carga][0]
+                    self.Y_Destino = self.espacios_Matriz3[pos_Carga][1]
+
+                    self.ventana.after(100, self.mover_Grua)
+                    #time.sleep(2)
+
+                    self.ventana.after(100, self.actualizar_Carga(self.letras_Carga[pos_Carga]))
+                    #time.sleep(2)
+        """
 
     def actualizar_Suministro1(self):
         # Actualiza la matriz de la zona de Suministro 1.
-        self.lienzo.create_rectangle(self.x, self.y, self.x + 40, self.y + 40, fill="white")
+        self.lienzo.create_rectangle(self.X_Destino, self.Y_Destino, self.X_Destino + 40, self.Y_Destino + 40, fill="white")
+        return
 
         #self.grua = self.lienzo.create_oval(x0, y0, x0 + 40, y0 + 40, width=1, fill="orange")
     
@@ -292,52 +317,67 @@ class Grua:
             color = "#0000FF"
 
         # Actualiza la matriz de la zona de Suministro 1.
-        self.lienzo.create_rectangle(self.x, self.y, self.x + 40, self.y + 40, fill=color)
+        self.lienzo.create_rectangle(self.X_Destino, self.Y_Destino, self.X_Destino + 40, self.Y_Destino + 40, width=3, fill=color)
 
-        #self.grua = self.lienzo.create_oval(x0, y0, x0 + 40, y0 + 40, width=1, fill="orange")
+        return
+
+        #self.grua = self.lienzo.create_oval(self.X_Actual, self.Y_Actual, self.X_Actual + 40, self.Y_Actual + 40, width=1, fill="orange")
+
+    # Mover la grúa.
+    def mover_Grua(self):
+        #listo = 0
+        self.lienzo.move(self.grua, self.X_Destino, self.Y_Destino)
+        #listo = 1
+        return
 
     # Mover la grúa en dirección Horizontal.
     def mover_Grua_X(self):
 
-        self.lienzo.move(self.grua, self.velocidad_X, 0)
-
         # Movimiento hacia la derecha.
-        if (self.X_Inicial < self.x):
+        if (self.X_Actual < self.X_Destino):
             self.velocidad_X = self.velocidad_X
 
         # Movimiento hacia la izquierda.
-        if (self.X_Inicial > self.x):
+        if (self.X_Actual > self.X_Destino):
             self.velocidad_X = -self.velocidad_X
             
-        if (self.X_Inicial == self.x):
+        if (self.X_Actual == self.X_Destino):
+            self.ventana.after_cancel(self.mover_Grua_X)
             self.mover_Grua_Y()
             return
+        
+        self.lienzo.move(self.grua, self.velocidad_X, 0)
 
-        self.X_Inicial += self.velocidad_X
+        self.X_Actual += self.velocidad_X
 
         self.ventana.after(20, self.mover_Grua_X)
+        #self.mover_Grua_X()
 
+    """
     # Mover la grúa en dirección Vertical.
     def mover_Grua_Y(self):
-        
-        self.lienzo.move(self.grua, 0, self.velocidad_Y)
 
         # Movimiento hacia la abajo.
-        if (self.Y_Inicial < self.y):
+        if (self.Y_Actual < self.Y_Destino):
             self.velocidad_Y = self.velocidad_Y
 
         # Movimiento hacia la arriba. 
-        if (self.Y_Inicial > self.y):
+        if (self.Y_Actual > self.Y_Destino):
             self.velocidad_Y = -self.velocidad_Y
 
-        if (self.Y_Inicial == self.y):
+        if (self.Y_Actual == self.Y_Destino):
+            self.ventana.after_cancel(self.mover_Grua_X)
             return
 
-        self.Y_Inicial += self.velocidad_Y
+        self.lienzo.move(self.grua, 0, self.velocidad_Y)
+
+        self.Y_Actual += self.velocidad_Y
 
         self.ventana.after(20, self.mover_Grua_Y)
+        #self.mover_Grua_Y()
+    """
 
 if __name__ == "__main__":
     ventana = tk.Tk()
-    app = Grua(ventana)
+    app = Interfaz(ventana)
     ventana.mainloop()
