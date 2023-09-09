@@ -317,6 +317,7 @@ class Interfaz:
                     self.actualizar_Carga(self.letras_Carga[pos_Carga])
                     time.sleep(2)
                     ventana.update()
+                    break
 
 
     def actualizar_Suministro1(self):
