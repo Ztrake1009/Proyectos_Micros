@@ -101,15 +101,9 @@ class Interfaz:
         #[116,116],[156,116]
         
         # Crea el objeto representativo de la grúa.
-        self.velocidad_X = 1
-        self.velocidad_Y = 1
+        self.movimiento_X = 1
+        self.movimiento_Y = 1
         
-        """
-        self.X_Inicial = self.tam_Bases + (self.tam_Esp_Libre/2) - self.radio
-        self.Y_Inicial = self.tam_Bases + (self.tam_Esp_Libre/2) - self.radio
-        self.X_Final = self.tam_Bases + (self.tam_Esp_Libre/2) + self.radio
-        self.Y_Final = self.tam_Bases + (self.tam_Esp_Libre/2) + self.radio
-        """
         self.X_Actual = self.tam_Bases
         self.Y_Actual = self.tam_Bases
         self.Y_Final = self.X_Actual + self.tam_Celdas_Carga
@@ -209,7 +203,33 @@ class Interfaz:
     def detectar_Cajas(self):
         
         #listo = 0
+        """
+        self.X_Destino = self.espacios_Matriz1[3][0]
+        self.Y_Destino = self.espacios_Matriz1[3][1]
 
+        # Ejecuta el movimiento.
+        self.mover_Grua()
+        time.sleep(1)
+        ventana.update()
+
+        self.actualizar_Suministro1()
+        time.sleep(2)
+        ventana.update()
+
+        self.X_Destino = self.espacios_Matriz3[0][0]
+        self.Y_Destino = self.espacios_Matriz3[0][1]
+
+        self.mover_Grua()
+        time.sleep(1)
+        ventana.update()
+
+        #self.ventana.after(2000, self.actualizar_Carga(self.letras_Carga[0]))
+        self.actualizar_Carga(self.letras_Carga[0])
+        time.sleep(2)
+        ventana.update()
+        """
+
+        """
         if (self.letras_Suministro1[self.i] == self.letras_Carga[self.j]):
 
             self.X_Destino = self.espacios_Matriz1[self.i][0]
@@ -242,7 +262,7 @@ class Interfaz:
         
         self.j += 1
         self.detectar_Cajas()
-
+        """
 
         """
         self.X_Destino = self.espacios_Matriz1[2][0]
@@ -270,7 +290,7 @@ class Interfaz:
         #self.ventana.after(20, self.detectar_Cajas)
 
         """
-        """
+
         for pos_Sum1, elem_Sum1 in enumerate(self.letras_Suministro1):
             for pos_Carga, elem_Carga in enumerate(self.letras_Carga):
                 if (elem_Sum1 == elem_Carga):
@@ -278,32 +298,33 @@ class Interfaz:
                     self.Y_Destino = self.espacios_Matriz1[pos_Sum1][1]
 
                     # Ejecuta el movimiento.
-                    self.ventana.after(100, self.mover_Grua)
-                    #self.mover_Grua()
+                    self.mover_Grua()
+                    time.sleep(1)
+                    ventana.update()
 
-                    #time.sleep(2)
-
-                    #if (listo == 1):
-
-                    self.ventana.after(100, self.actualizar_Suministro1)
-                    #time.sleep(2)
+                    self.actualizar_Suministro1()
+                    time.sleep(2)
+                    ventana.update()
 
                     self.X_Destino = self.espacios_Matriz3[pos_Carga][0]
                     self.Y_Destino = self.espacios_Matriz3[pos_Carga][1]
 
-                    self.ventana.after(100, self.mover_Grua)
-                    #time.sleep(2)
+                    self.mover_Grua()
+                    time.sleep(1)
+                    ventana.update()
 
-                    self.ventana.after(100, self.actualizar_Carga(self.letras_Carga[pos_Carga]))
-                    #time.sleep(2)
-        """
+                    #self.ventana.after(2000, self.actualizar_Carga(self.letras_Carga[0]))
+                    self.actualizar_Carga(self.letras_Carga[pos_Carga])
+                    time.sleep(2)
+                    ventana.update()
+
 
     def actualizar_Suministro1(self):
         # Actualiza la matriz de la zona de Suministro 1.
         self.lienzo.create_rectangle(self.X_Destino, self.Y_Destino, self.X_Destino + 40, self.Y_Destino + 40, fill="white")
+        
+        self.grua = self.lienzo.create_oval(self.X_Actual, self.Y_Actual, self.X_Actual + 40, self.Y_Actual + 40, width=1, fill="orange")
         return
-
-        #self.grua = self.lienzo.create_oval(x0, y0, x0 + 40, y0 + 40, width=1, fill="orange")
     
     def actualizar_Carga(self, letra):
 
@@ -319,17 +340,37 @@ class Interfaz:
         # Actualiza la matriz de la zona de Suministro 1.
         self.lienzo.create_rectangle(self.X_Destino, self.Y_Destino, self.X_Destino + 40, self.Y_Destino + 40, width=3, fill=color)
 
-        return
+        self.grua = self.lienzo.create_oval(self.X_Actual, self.Y_Actual, self.X_Actual + 40, self.Y_Actual + 40, width=1, fill="orange")
 
-        #self.grua = self.lienzo.create_oval(self.X_Actual, self.Y_Actual, self.X_Actual + 40, self.Y_Actual + 40, width=1, fill="orange")
+        return
 
     # Mover la grúa.
     def mover_Grua(self):
         #listo = 0
-        self.lienzo.move(self.grua, self.X_Destino, self.Y_Destino)
+
+        # Movimiento hacia la derecha.
+        self.movimiento_X = self.X_Destino - self.X_Actual
+
+        # Movimiento vertical.
+        self.movimiento_Y = self.Y_Destino - self.Y_Actual
+
+        # Si ya está en la misma posición en X que el destino.
+        if (self.X_Actual == self.X_Destino):
+            self.movimiento_X = 0
+        
+        # Si ya está en la misma posición en Y que el destino.
+        if (self.Y_Actual == self.Y_Destino):
+            self.movimiento_Y = 0
+
+        self.lienzo.move(self.grua, self.movimiento_X, self.movimiento_Y)
         #listo = 1
+
+        self.X_Actual = self.X_Destino
+        self.Y_Actual = self.Y_Destino
+        
         return
 
+    """
     # Mover la grúa en dirección Horizontal.
     def mover_Grua_X(self):
 
@@ -353,7 +394,7 @@ class Interfaz:
         self.ventana.after(20, self.mover_Grua_X)
         #self.mover_Grua_X()
 
-    """
+    
     # Mover la grúa en dirección Vertical.
     def mover_Grua_Y(self):
 
