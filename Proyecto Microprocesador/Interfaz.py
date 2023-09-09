@@ -317,6 +317,7 @@ class Interfaz:
                     self.actualizar_Carga(self.letras_Carga[pos_Carga])
                     time.sleep(2)
                     ventana.update()
+                    self.letras_Carga[pos_Carga] = 0
                     break
 
 
