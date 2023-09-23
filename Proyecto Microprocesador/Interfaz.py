@@ -31,7 +31,25 @@ class Interfaz:
             self.letras_Carga = [cell.value for row in hoja.iter_rows() for cell in row]
             libro.close()
             self.Sel_Modo()
-        #print (letras)
+
+        letra = 0
+        contador_R = 0
+        contador_G = 0
+        contador_B = 0
+
+        while letra < len(self.letras_Carga):
+            if self.letras_Carga[letra] == "R":  # Caja Roja.
+                contador_R += 1
+
+            elif self.letras_Carga[letra] == "G":  # Caja Verde.
+                contador_G += 1
+
+            elif self.letras_Carga[letra] == "B":  # Caja Azul.
+                contador_B += 1
+            letra += 1
+        print(contador_R)
+        print(contador_G)
+        print(contador_B)
 
     def Sel_Modo(self):
         self.boton_Modo1 = tk.Button(ventana, text="Ejecutar Modo de Acomodo 1", command=self.Modo1)
@@ -53,7 +71,7 @@ class Interfaz:
         self.i = 0
         self.j = 0
 
-        self.boton_Iniciar = tk.Button(ventana, text="Iniciar Acomodo", command=self.acomodar_Cajas)
+        self.boton_Iniciar = tk.Button(ventana, text="Iniciar Acomodo", command=self.acomodar_Cajas_1)
         self.boton_Iniciar.pack(side="top")
 
         self.tamX_Matriz1 = 8  # Cantidad columnas de la zona de suministro 1.
@@ -214,7 +232,7 @@ class Interfaz:
             else:
                 return "white"
             
-    def acomodar_Cajas(self):
+    def acomodar_Cajas_1(self):
         self.boton_Iniciar.destroy()
 
         for pos_Sum1, elem_Sum1 in enumerate(self.letras_Suministro1):
