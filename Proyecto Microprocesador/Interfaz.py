@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
-import openpyxl
+#import openpyxl
+import csv
 import time
 
 class Interfaz:
@@ -9,7 +10,7 @@ class Interfaz:
         self.ventana.title("Grúa Pórtico")
         self.ventana.geometry("600x600")
 
-        self.boton_Cargar = tk.Button(ventana, text="Cargar Archivo Excel", command=self.abrir_Excel)
+        self.boton_Cargar = tk.Button(ventana, text="Cargar Archivo CSV", command=self.abrir_Excel)
         self.boton_Cargar.pack(side="top")
 
         self.letras_Suministro1 = []
@@ -24,12 +25,14 @@ class Interfaz:
 
     # Selecciona el archivo de excel para saber que cajas deben ir en la matriz de carga.
     def abrir_Excel(self):
-        archivo_path = filedialog.askopenfilename(filetypes=[("Archivos Excel", "*.xlsx")])
+        archivo_path = filedialog.askopenfilename(filetypes=[("Archivos CSV", "*.csv")])
+        
         if archivo_path:
-            libro = openpyxl.load_workbook(archivo_path)
-            hoja = libro.active
-            self.letras_Carga = [cell.value for row in hoja.iter_rows() for cell in row]
-            libro.close()
+            with open(archivo_path, 'r', newline='') as file:
+                lector_csv = csv.reader(file, delimiter=';')
+                for fila in lector_csv:
+                    for elemento in fila:
+                        self.letras_Carga.append(elemento)
             self.Sel_Modo()
 
         letra = 0
@@ -132,12 +135,14 @@ class Interfaz:
 
     # Carga el archivo de excel de prueba para la matriz de suministro.
     def leer_Excel_Prueba(self):
-        archivo_path = filedialog.askopenfilename(filetypes=[("Archivos Excel", "*.xlsx")])
+        archivo_path = filedialog.askopenfilename(filetypes=[("Archivos CSV", "*.csv")])
+        
         if archivo_path:
-            libro = openpyxl.load_workbook(archivo_path)
-            hoja = libro.active
-            self.letras_Suministro1 = [cell.value for row in hoja.iter_rows() for cell in row]
-            libro.close()
+            with open(archivo_path, 'r', newline='') as file:
+                lector_csv = csv.reader(file, delimiter=';')
+                for fila in lector_csv:
+                    for elemento in fila:
+                        self.letras_Suministro1.append(elemento)
 
         i = 0
         while (i < 16):
