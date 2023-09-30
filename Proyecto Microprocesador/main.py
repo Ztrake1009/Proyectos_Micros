@@ -6,13 +6,11 @@ import time
 from Clases import *
 
 
-
-
 def abrir_Excel(list_posx,list_posy):
         """
         Función: Abrir los archivos de excel en formato cvs
         Entrada: Lista de las posiciones de X y Y
-        Salida: Lista con las cajas de carga
+        Salida: Lista con las cajas de carga deseada
         """
 
         lista = []
@@ -31,7 +29,6 @@ def abrir_Excel(list_posx,list_posy):
                         a = Carga(posx, posy,elemento)
                         lista.append(a)
                         i+=1
-
 
         letra = 0
         contador_R = 0
