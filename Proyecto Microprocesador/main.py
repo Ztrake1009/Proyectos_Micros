@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import filedialog
 import csv
 import time
+import serial
 from Clases import *
 
 #########################################################################################################
@@ -52,10 +53,14 @@ def Interfaz(ventana):
 
 # Función: Abrir los archivos de excel en formato cvs.
 def abrir_Excel():
+    global microProces
+    
     global letras_Carga
     global contador_R
     global contador_G
     global contador_B
+
+    microProces = serial.Serial("COM3", 9600)
 
     letras_Carga = []
 
@@ -288,7 +293,6 @@ def crear_Matriz_C(lienzo, matriz3):
                 espacio.colocada = True
             lista_Carga.append(espacio)
 
-
             letra_actual += 1
 
 # Define el color del espacio de la matriz dependiendo de la lista que reciba.
@@ -305,7 +309,6 @@ def ident_Color(letra_actual, letras):
         
         else:
             return "white"
-        
 
 def acomodo_Cajas_1():
     global boton_Iniciar
@@ -316,6 +319,7 @@ def acomodo_Cajas_1():
 
     boton_Iniciar.destroy()
 
+    tiempo = 2
     #for pos_Carga_I, elem_Carga_I in enumerate(letras_Carga_Inicial):
     for pos_Sum1, elem_Sum1 in enumerate(lista_Suministro1):
         for pos_Carga, elem_Carga in enumerate(lista_Carga):
@@ -326,17 +330,18 @@ def acomodo_Cajas_1():
                 # Ejecuta el movimiento, primero en X y luego en Y.
                 # Primero se mueve hacia la caja que debe recoger.
                 Mensaje.config(text="Moviendo Grua hacia la caja por recoger.")
-                mover_Grua_X(X_Destino)
-                time.sleep(0.1)
-                ventana.update()
+                motor = 0 # Este es el número para activar el motor que mueve en X
+                mover_Motor_X(motor, X_Actual, X_Destino)
+                mover_X_Interfaz(X_Destino)
+                #time.sleep(tiempo)
 
-                mover_Grua_Y(Y_Destino)
-                time.sleep(0.1)
+                mover_Y_Interfaz(Y_Destino)
+                time.sleep(tiempo)
                 Mensaje.config(text="Recogiendo caja.")
                 ventana.update()
 
                 actualizar_Suministro1(X_Destino, Y_Destino)
-                time.sleep(0.1)
+                time.sleep(tiempo)
                 ventana.update()
 
                 X_Destino = elem_Carga.posx
@@ -344,17 +349,19 @@ def acomodo_Cajas_1():
                 
                 # Ahora se mueve hacia el espacio donde debe dejar la caja.
                 Mensaje.config(text="Moviendo Grua hacia el espacio designado.")
-                mover_Grua_X(X_Destino)
-                time.sleep(0.1)
-                ventana.update()
 
-                mover_Grua_Y(Y_Destino)
-                time.sleep(0.1)
+                motor = 0 # Este es el número para activar el motor que mueve en X
+                mover_Motor_X(motor, X_Actual, X_Destino)
+                mover_X_Interfaz(X_Destino)
+                #time.sleep(tiempo)
+
+                mover_Y_Interfaz(Y_Destino)
+                time.sleep(tiempo)
                 Mensaje.config(text="Dejando caja.")
                 ventana.update()
 
                 actualizar_Carga(elem_Carga.color, X_Destino, Y_Destino)
-                time.sleep(0.1)
+                time.sleep(tiempo)
                 ventana.update()
                 letras_Carga[pos_Carga] = 0
 
@@ -368,17 +375,19 @@ def acomodo_Cajas_1():
     Mensaje.config(text="Volviendo a la posición inicial.")
     X_Destino = tam_Bases
     Y_Destino = tam_Bases
-    mover_Grua_X(X_Destino)
-    time.sleep(2)
-    ventana.update()
 
-    mover_Grua_Y(Y_Destino)
-    time.sleep(2)
+    motor = 0 # Este es el número para activar el motor que mueve en X
+    mover_Motor_X(motor, X_Actual, X_Destino)
+    mover_X_Interfaz(X_Destino)
+    #time.sleep(tiempo)
+
+    mover_Y_Interfaz(Y_Destino)
+    time.sleep(tiempo)
     Mensaje.config(text="Ha finalizado el acomodo.")
     ventana.update()
 
 # Mover la grúa horizontalmente.
-def mover_Grua_X(X_Destino):
+def mover_X_Interfaz(X_Destino):
     global grua
     global X_Actual
 
@@ -392,10 +401,13 @@ def mover_Grua_X(X_Destino):
     lienzo.move(grua, movimiento_X, 0)
 
     X_Actual = X_Destino
+
+    ventana.update()
+
     return
 
 # Mover la grúa verticalmente.
-def mover_Grua_Y(Y_Destino):
+def mover_Y_Interfaz(Y_Destino):
     global grua
     global Y_Actual
 
@@ -456,10 +468,14 @@ def volver_Inicio():
     global X_Actual
     global Y_Actual
 
+    global microProces
+
     lienzo.destroy()
     boton_Volver.destroy()
     boton_Iniciar.destroy()
     Mensaje.destroy()
+
+    microProces.close()
 
     lista_Carga = []
     lista_Suministro1 = []
@@ -472,6 +488,16 @@ def volver_Inicio():
 
     boton_Cargar = tk.Button(ventana, text="Cargar Archivo CSV", command=abrir_Excel)
     boton_Cargar.pack(side="top")
+
+def mover_Motor_X(motor, X_Actual, X_Destino):
+    global microProces
+
+    pasos = X_Destino - X_Actual
+
+    #Se envían los pasos que debe dar el motor y el motor a utilizar
+    microProces.write(str(pasos).encode())
+
+    time.sleep(2)
 
 
 #########################################################################################################
