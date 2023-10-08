@@ -4,6 +4,8 @@ from tkinter import filedialog
 import csv
 import time
 import serial
+import cv2
+from pyzbar.pyzbar import decode
 from Clases import *
 
 #########################################################################################################
@@ -17,9 +19,9 @@ letras_Suministro1 = []
 letras_Suministro2 = []
 letras_Carga = []
 
-contador_R = 0
-contador_G = 0
-contador_B = 0
+contador_R_Carga = 0
+contador_G_Carga = 0
+contador_B_Carga = 0
 
 tamX_Matriz1 = 8  # Cantidad columnas de la zona de suministro 1.
 tamY_Matriz1 = 3  # Cantidad filas de la zona de suministro 1.
@@ -56,9 +58,9 @@ def abrir_Excel():
     global microProces
     
     global letras_Carga
-    global contador_R
-    global contador_G
-    global contador_B
+    global contador_R_Carga
+    global contador_G_Carga
+    global contador_B_Carga
 
     microProces = serial.Serial("COM3", 9600)
 
@@ -74,24 +76,24 @@ def abrir_Excel():
                     letras_Carga.append(color)
 
     letra = 0
-    contador_R = 0
-    contador_G = 0
-    contador_B = 0
+    contador_R_Carga = 0
+    contador_G_Carga = 0
+    contador_B_Carga = 0
 
     while letra < len(letras_Carga):
         if letras_Carga[letra] == "R":  # Caja Roja.
-            contador_R += 1
+            contador_R_Carga += 1
 
         elif letras_Carga[letra] == "G":  # Caja Verde.
-            contador_G += 1
+            contador_G_Carga += 1
 
         elif letras_Carga[letra] == "B":  # Caja Azul.
-            contador_B += 1
+            contador_B_Carga += 1
         letra += 1
     
-    print(contador_R)
-    print(contador_G)
-    print(contador_B)
+    print(contador_R_Carga)
+    print(contador_G_Carga)
+    print(contador_B_Carga)
 
     Sel_Modo()
 
@@ -126,7 +128,9 @@ def Dibujar(Modo_Seleccionado):
     global grua
     global X_Actual
     global Y_Actual
-
+    global lista_Suministro1
+    global lista_Suministro2
+    
     boton_Cargar.destroy()
     boton_Modo1.destroy()
     boton_Modo2.destroy()
@@ -147,11 +151,20 @@ def Dibujar(Modo_Seleccionado):
     y1 = 416
     Esp_Libre = lienzo.create_rectangle(x0, y0, x1, y1, fill="#B2B2B2")
 
-    """
-    If (Modo_Seleccionado == 1):
-        Lectura del Espacio de Trabajo (Modo_Seleccionado)
-    """
+    lista_Suministro1 = []
+    lista_Suministro2 = []
 
+    if (Modo_Seleccionado == 1):
+        #Lectura del Espacio de Trabajo
+        lectura_Inicial()
+
+    i = 0
+    while (i < 16):
+        color = ""
+        espacio = Suministro(0,0,color,False)
+        lista_Suministro2.append(espacio)
+        i += 1
+    
     crear_Matriz_S1(lienzo, matriz1)
     crear_Matriz_S2(lienzo, matriz2)
     crear_Matriz_C(lienzo, matriz3)
@@ -202,10 +215,6 @@ def leer_Excel_Prueba():
 
 # Crea la Matriz de Suministro 1.
 def crear_Matriz_S1(lienzo, matriz1):
-    global lista_Suministro1
-    lista_Suministro1 = []
-
-    leer_Excel_Prueba()
     letra_actual = 0
 
     for fila_Matriz1 in range(tamY_Matriz1):
@@ -214,17 +223,18 @@ def crear_Matriz_S1(lienzo, matriz1):
             y0 = tam_Bases + tam_Esp_Libre + (fila_Matriz1 * tam_Celdas)
             x1 = x0 + tam_Celdas
             y1 = y0 + tam_Celdas
-            color = ident_Color(letra_actual, letras_Suministro1)
+            color = ident_Color(lista_Suministro1[letra_actual].color)
             matriz1[fila_Matriz1][col_Matriz1] = lienzo.create_rectangle(x0, y0, x1, y1, fill=color)
                         
             posx = x0
             posy = y0
-            color = letras_Suministro1[letra_actual]
+
+            #Para el modo 1
+            lista_Suministro1[letra_actual].posx = x0
+            lista_Suministro1[letra_actual].posy = y0
 
             letra_actual += 1
 
-            espacio = Suministro(posx,posy,color,False)
-            lista_Suministro1.append(espacio)
 
             # Crea el ultimo espacio de la matriz de manera que se "sale" de los 8x3 espacios originales, esto para que sean 25 espacios en total.
             if (fila_Matriz1 == 2) and (col_Matriz1 == 7):
@@ -234,20 +244,18 @@ def crear_Matriz_S1(lienzo, matriz1):
                 y0 = tam_Bases + tam_Esp_Libre + (fila_Matriz1 * tam_Celdas)
                 x1 = x0 + tam_Celdas
                 y1 = y0 + tam_Celdas                    
-                color = ident_Color(letra_actual, letras_Suministro1)
+                color = ident_Color(lista_Suministro1[letra_actual].color)
                 matriz1[fila_Matriz1][col_Matriz1] = lienzo.create_rectangle(x0, y0, x1, y1, fill=color)
                 
                 posx = x0
                 posy = y0
-                color = letras_Suministro1[letra_actual]
 
-                espacio = Suministro(posx,posy,color,True)
-                lista_Suministro1.append(espacio)
+                #Para el modo 1
+                lista_Suministro1[letra_actual].posx = x0
+                lista_Suministro1[letra_actual].posy = y0
 
 # Crea la Matriz 2.
 def crear_Matriz_S2(lienzo, matriz2):
-    global lista_Suministro2
-    lista_Suministro2 = []
 
     letra_actual = 0
     for fila_Matriz2 in range(tamY_Matriz2):
@@ -260,15 +268,14 @@ def crear_Matriz_S2(lienzo, matriz2):
             y0 = tam_Bases + tam_Esp_Libre + (tam_Celdas * tamY_Matriz1) + (fila_Matriz2 * tam_Celdas)
             x1 = x0 + tam_Celdas
             y1 = y0 + tam_Celdas
-            color = ident_Color(letra_actual, letras_Suministro2)
+            color = ident_Color(lista_Suministro2[letra_actual].color)
             matriz2[fila_Matriz2][col_Matriz2] = lienzo.create_rectangle(x0, y0, x1, y1, fill=color)
 
             posx = x0
             posy = y0
-            color = letras_Suministro2[letra_actual]
 
-            espacio = Suministro(posx,posy,color,False)
-            lista_Suministro2.append(espacio)
+            lista_Suministro2[letra_actual].posx = x0
+            lista_Suministro2[letra_actual].posy = y0
 
             letra_actual += 1
 
@@ -281,7 +288,7 @@ def crear_Matriz_C(lienzo, matriz3):
             y0 = tam_Bases + tam_Esp_Libre + (tam_Celdas * tamY_Matriz1) + (fila_Matriz3 * tam_Celdas)
             x1 = x0 + tam_Celdas
             y1 = y0 + tam_Celdas
-            color = ident_Color(letra_actual, letras_Carga)
+            color = ident_Color(letras_Carga[letra_actual])
             matriz3[fila_Matriz3][col_Matriz3] = lienzo.create_rectangle(x0, y0, x1, y1, width=3, fill=color)
 
             posx = x0
@@ -296,19 +303,84 @@ def crear_Matriz_C(lienzo, matriz3):
             letra_actual += 1
 
 # Define el color del espacio de la matriz dependiendo de la lista que reciba.
-def ident_Color(letra_actual, letras):
-    while letra_actual < len(letras):
-        if letras[letra_actual] == "R":  # Rojo Claro.
-            return "#FFAAAA"
+def ident_Color(letra):
+    if letra == "R":  # Rojo Claro.
+        return "#FFAAAA"
 
-        elif letras[letra_actual] == "G":  # Verde Claro.
-            return "#AAFFAA"
+    elif letra == "G":  # Verde Claro.
+        return "#AAFFAA"
 
-        elif letras[letra_actual] == "B":  # Azul Claro.
-            return "#AAAAFF"
+    elif letra == "B":  # Azul Claro.
+        return "#AAAAFF"
+    
+    else:
+        return "white"
+
+def lectura_Inicial():
+    global lista_Suministro1
+
+    lista_Suministro1 = []
+    contador_R_Suministro = 0
+    contador_G_Suministro = 0
+    contador_B_Suministro = 0
+    
+    # Ciclo para recorrer la zona de suministro.
+    pos_actual = 0
+    while (pos_actual < 25):
+        #Mover motores a pos_actual del suministro
+
+        color = leer_QR()
+        caja = Suministro(0,0,color,True)
+        if (color == "V"):
+            caja.ocupada = False
         
-        else:
-            return "white"
+        elif (color == "R"):
+            contador_R_Suministro += 1
+        
+        elif (color == "G"):
+            contador_G_Suministro += 1
+
+        elif (color == "B"):
+            contador_B_Suministro += 1
+        
+        lista_Suministro1.append(caja)
+
+        """#Suena las alarmas
+        #Alarma 1
+        if (contador_R_Suministro < contador_R_Carga):
+            #Llama a la función de alarma 1
+        if (contador_G_Suministro < contador_G_Carga):
+            #Llama a la función de alarma 1
+        if (contador_B_Suministro < contador_B_Carga):
+            #Llama a la función de alarma 1
+        
+        #Alarma 2
+        if (contador_R_Suministro > contador_R_Carga):
+            #Llama a la función de alarma 2
+        if (contador_G_Suministro > contador_G_Carga):
+            #Llama a la función de alarma 2
+        if (contador_B_Suministro > contador_B_Carga):
+            #Llama a la función de alarma 2"""
+
+        pos_actual += 1
+    
+        print("SUMINISTRO")
+        b= []
+        for pos,elem in enumerate(lista_Suministro1):
+            a = elem.color
+            if elem.ocupada == False:
+                a = "-"
+            print(pos, "      ",a)
+    # Ciclo para recorrer la zona de carga.
+    """pos_actual = 0
+    while (pos_actual < 25):
+        #Mover motores a pos_actual de la Carga
+
+        color = leer_QR()
+        if (color != "V"):
+            #Llama a la función de alarma 3
+
+        pos_actual += 1"""
 
 def acomodo_Cajas_1():
     global boton_Iniciar
@@ -499,6 +571,60 @@ def mover_Motor_X(motor, X_Actual, X_Destino):
 
     time.sleep(2)
 
+def leer_QR():
+    # Creamos la videocaptura
+    cap = cv2.VideoCapture(0)
+    leyo = False
+    # Empezamos
+    while True:
+        # Leemos los frames
+        ret, frame = cap.read()
+
+        # Leemos los codigos QR
+        for codes in decode(frame):
+
+            # Decodidficamos
+            info = codes.data.decode("utf-8") # En código ASCII
+
+            # Tipo de caja, LETRA en ASCII
+            tipo = info[0:2]
+            tipo = int(tipo)
+
+            #Formato para los códigos:
+            #Caja Roja: 82
+            if tipo == 82:  # R->82, RED
+                color = "R"
+                leyo = True
+                break
+
+            
+            #Formato para los códigos:
+            #Caja Verde: 71
+            if tipo == 71:  # G->71, GREEN
+                color = "G"
+                leyo = True
+                break
+            
+            #Formato para los códigos:
+            #Caja Azul: 66
+            if tipo == 66:  # B->66, BLUE
+                color = "B"
+                leyo = True
+                break
+
+            #Formato para los códigos:
+            #Espacio Vacio: 86
+            if tipo == 86:  # V->86, Espacio Vacio
+                color = "V"
+                leyo = True
+                break
+        if (leyo == True):
+            break
+        
+    cv2.destroyAllWindows()
+    cap.release()
+
+    return (color)
 
 #########################################################################################################
 # Main.
