@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 08.10.2023 21:12:52
+// Create Date: 11.10.2023 18:06:47
 // Design Name: 
-// Module Name: Extend_20to32_TB
+// Module Name: PCplus4_TB
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,32 +20,33 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Extend_20to32_TB(
+module PCplus4_TB(
     );
     //Inputs
-    reg [19:0] Extender;  //Entrada de 20 bits
+    reg [31:0] PC; //PC de entrada
     
     //Outputs
-    wire [31:0] Extendido; //Salida de 32 bits
+    wire [31:0] Next_PC; //PC + 4 de salida
     
     //Instantiate
     //Llamado de variables en el modulo del testbench correspondiente
-    Extend_20to32 UUT(
-    .Extender(Extender),
-    .Extendido(Extendido)
+    PCplus4 UUT(
+    .PC(PC),
+    .Next_PC(Next_PC)
     );
     
     //Stimulus
+    //Se declaran diferentes instrucciones entrantes
     initial begin
-        Extender = 20'd0;
+        PC = 32'h0;
         #100
-        Extender = 20'd69; //Prueba con el numero 69
+        PC = 32'h4;
         #100
-        Extender = 20'd1048574; //Prueba con el numero 1048574
+        PC = 32'h8;
         #100
-        Extender = 20'd250; //Prueba con el numero 250
+        PC = 32'hc;
         #100
-        Extender = 20'h0000b; //Prueba con el numero 0000b en hexadecimal 
+        PC = 32'h10;
         #100
         $finish;
     end

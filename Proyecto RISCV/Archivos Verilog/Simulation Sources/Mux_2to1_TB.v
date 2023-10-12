@@ -40,21 +40,21 @@ module Mux_2to1_TB(
     
     //Stimulus
     initial begin
-    //Se definen valores para las opciones 1 y 2
-    Num_A = 32'd3000000;
-    Num_B = 32'd4;
-    Selector = 0; //Se selecciona la opcion 1
-    #100
-    Selector = 1; //se selecciona la opcion 2
-    #100
-    
-    //Se definen valores para las opciones 1 y 2
-    Num_A = 32'd902;
-    Num_B = 32'd5254513;
-    Selector = 0; //se selecciona la opcion 1
-    #100
-    Selector = 1; //se selecciona la opcion 2
-    #100
-    $finish;
+        //Se definen valores para las opciones 1 y 2
+        Num_A = 32'd3000000;
+        Num_B = 32'd4;
+        Selector = 0; //Se selecciona la opcion 1
+        #100
+        Selector = 1; //Se selecciona la opcion 2
+        #100
+        
+        //Se definen valores para las opciones 1 y 2
+        Num_A = 32'd902;
+        Num_B = 32'd5254513;
+        Selector = 0; //Se selecciona la opcion 1
+        #100
+        Selector = 1; //Se selecciona la opcion 2
+        #100
+        $finish;
     end
 endmodule

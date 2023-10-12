@@ -31,7 +31,7 @@ module Concatenar_TB(
     
     //Instantiate
     //Llamado de variables en el modulo del testbench correspondiente
-    Concatenar uut (
+    Concatenar UUT(
     .Num_A(Num_A),
     .Num_B(Num_B),
     .Salida(Salida)
@@ -39,15 +39,18 @@ module Concatenar_TB(
     
     //Stimulus
     initial begin
-    Num_A = 5'd0;
-    Num_B = 7'd0;
-    #100
-    Num_A = 5'd15;
-    Num_B = 7'd87;
-    #100
-    Num_A = 5'd4;
-    Num_B = 7'd127;
-    #100
-    $finish;
+        //Prueba con los numeros 0 y 0
+        Num_A = 5'd0;
+        Num_B = 7'd0;
+        #100
+        //Prueba con los numeros 15 y 87
+        Num_A = 5'd15;
+        Num_B = 7'd87;
+        #100
+        //Prueba con los numeros 4 y 127
+        Num_A = 5'd4;
+        Num_B = 7'd127;
+        #100
+        $finish;
     end
 endmodule

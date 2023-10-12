@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 08.10.2023 20:59:11
+// Create Date: 11.10.2023 18:02:37
 // Design Name: 
-// Module Name: Extend_12to32
+// Module Name: PCplus4
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,14 +20,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module Extend_12to32(
-    input [11:0] Extender, //Entrada de 12 bits
-    output [31:0] Extendido //Salida de 32 bits
+module PCplus4(
+    input [31:0] PC, //PC de entrada
+    output reg [31:0] Next_PC //PC + 4 de salida 
     );
     
-    //Variable a utilizar para llenar con ceros la salida
-    reg[19:0] Ceros = 20'h00000;
-    
-    //Concatena 20 ceros a la entrada dejando la entrada a la derecha
-    assign Extendido = {Ceros,Extender};
+    always@(*) //Siempre que haya un cambio 
+        Next_PC = PC + 32'd4; //Se le suma 4 a PC para avanzar la siguiente instruccion 
 endmodule

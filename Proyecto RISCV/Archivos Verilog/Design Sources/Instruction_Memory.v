@@ -21,7 +21,7 @@
 
 
 module Instruction_Memory(
-    input clk, rst, //Reloj del sistema y el Reset
+    input CLK, RST, //Reloj del sistema y el Reset
     input [31:0] Dir, //Direccion de la instruccion
     output reg [31:0] Inst //Instruccion en la direccion
     );

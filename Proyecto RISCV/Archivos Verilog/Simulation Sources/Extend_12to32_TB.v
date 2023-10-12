@@ -37,15 +37,15 @@ module Extend_12to32_TB(
     
     //Stimulus
     initial begin
-    Extender = 12'd0;
-    #100
-    Extender = 12'd45; //probamos extendiendo el numero 45
-    #100
-    Extender = 12'd2047; //probamos extendiendo el numero 2047
-    #100
-    Extender = 12'd250; //probamos extendiendo el numero 250
-    #100
-    $finish;
+        Extender = 12'd0;
+        #100
+        Extender = 12'd45; //Prueba con el numero 45
+        #100
+        Extender = 12'd2047; //Prueba con el numero 2047
+        #100
+        Extender = 12'd250; //Prueba con el numero 250
+        #100
+        $finish;
     end
 
 endmodule

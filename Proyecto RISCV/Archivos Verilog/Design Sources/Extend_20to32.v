@@ -25,6 +25,10 @@ module Extend_20to32(
     output [31:0] Extendido //Salida de 32 bits
     );
     
-    //Concatena 12 ceros a la entrada dejando la entrada a la derecha
-    assign Extendido = {{12{Extender[19]}},Extender};
+    //Variable a utilizar para llenar con ceros la salida
+    reg[11:0] Ceros = 12'h000;
+    
+    //Toma la entrada y la posiciona en los 20 bits más significativos de la salida
+    //Luego adjunta a los 12 bits menos significativos ceros
+    assign Extendido = {Extender,Ceros};
 endmodule
