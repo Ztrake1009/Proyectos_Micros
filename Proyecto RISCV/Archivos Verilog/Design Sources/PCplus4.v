@@ -1,22 +1,22 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 11.10.2023 18:02:37
-// Design Name: 
-// Module Name: PCplus4
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+/*
+
+Funcionalidad:
+En este bloque se espera que según la señal de PC entrante
+pueda salir un PC nuevo pero sumado con 4.
+
+
+Entradas:
+Variable PC (PC que se está utilizando en ese momento).
+
+Salidas:
+Variable Next_PC (Sale el nuevo PC pero con una suma de 4).
+
+Razón:
+Se crea para poder seguir a la nueva instruccion u operacion por realizar.
+
+*/
 //////////////////////////////////////////////////////////////////////////////////
 
 

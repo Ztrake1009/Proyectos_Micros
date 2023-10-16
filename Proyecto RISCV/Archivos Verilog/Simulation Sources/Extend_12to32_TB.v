@@ -1,22 +1,12 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 08.10.2023 21:01:51
-// Design Name: 
-// Module Name: Extend_12to32_TB
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+/*
+
+Objetivo:
+En este bloque se espera simular correctamente la extension de
+la palabra de 12 bits a 32 bits.
+
+*/  
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -38,14 +28,21 @@ module Extend_12to32_TB(
     //Stimulus
     initial begin
         Extender = 12'd0;
+        //Resultado esperado: 32'h00000000
+        
         #100
         Extender = 12'd45; //Prueba con el numero 45
+        //Resultado esperado: 32'h0000002D
+        
         #100
         Extender = 12'd2047; //Prueba con el numero 2047
+        //Resultado esperado: 32'h000007FF
+        
         #100
         Extender = 12'd250; //Prueba con el numero 250
+        //Resultado esperado: 32'h000000FA
+        
         #100
         $finish;
     end
-
 endmodule

@@ -1,22 +1,23 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 08.10.2023 21:22:18
-// Design Name: 
-// Module Name: Concatenar
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+/*
+
+Funcionalidad:
+En este bloque se espera que se combinen dos entradas distintas en una salida de
+12 bits.
+
+Entradas:
+Variable Num_A (Entrada A de 5 bits).
+Variable Num_B (Entrada B de 7 bits).
+
+Salidas:
+Variable Salida (Sale la concatenación de las entradas A y B).
+
+Razón:
+Se crea para poder concatenar dos variables, este bloque se utiliza solamente
+a la hora de seleccionar entre el uso de instrucciones tipo I o S.
+
+*/
 //////////////////////////////////////////////////////////////////////////////////
 
 

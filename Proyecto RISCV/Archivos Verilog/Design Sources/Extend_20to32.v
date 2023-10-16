@@ -1,22 +1,24 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 08.10.2023 21:11:00
-// Design Name: 
-// Module Name: Extend_20to32
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+/*
+
+Funcionalidad:
+En este bloque se espera extender una entrada de 20 bits a 32 bits,
+para esto se rellena con ceros a la derecha.
+
+Entradas:
+Variable Extender (Entrada de 20 bits).
+
+Salidas:
+Variable Extendido (Sale la entrada de 20 bits extendida a 32 bits).
+
+Razón:
+Se utiliza debido a que RISCV se maneja con 32 bits, por lo que es necesario una extension,
+sin embargo, este bloque solo es necesario para instrucciones tipo U, entre las operaciones a realizar
+solo se encuentra una LUI, la cual debido a que guarda los 20 bits a la izquierda, entonces la extensión
+se debe realizar hacia la derecha.
+
+*/
 //////////////////////////////////////////////////////////////////////////////////
 
 

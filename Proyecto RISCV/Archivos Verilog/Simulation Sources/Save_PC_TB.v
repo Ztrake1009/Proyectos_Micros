@@ -1,22 +1,12 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 11.10.2023 19:01:09
-// Design Name: 
-// Module Name: Save_PC_TB
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+/*
+
+Objetivo:
+En este bloque se espera simular correctamente la actualizacion del PC
+anterior al nuevo PC.
+
+*/  
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -43,20 +33,38 @@ module Save_PC_TB(
         RST = 0;
         CLK = 0;
         
-        PC_In = 32'h4; //Se define una instruccion entrante de prueba
-        CLK = 0; 
-        #100
-        CLK = 1;     
-        #100
-        PC_In = 32'h8; //Se define una instruccion entrante de prueba
-        CLK = 0; 
+        PC_In = 32'h0; //Se define que el PC de entrada es 32'h0
+        CLK = 0;
+        //Resultado esperado: PC_Out = 32'hXXXXXXXX (no interesa el PC anterior porque no se ha usado el CLK)
         #100
         CLK = 1;
+        //Resultado esperado: PC_Out = 32'h00000000
+        
         #100
-        PC_In = 32'hc; //Se define una instruccion entrante de prueba
-        CLK = 0; 
+        PC_In = 32'h4; //Se define que el PC de entrada es 32'h4
+        CLK = 0;
+        //Resultado esperado: PC_Out = 32'h00000000
         #100
         CLK = 1;
+        //Resultado esperado: PC_Out = 32'h00000004
+        
+        #100
+        PC_In = 32'h8; //Se define que el PC de entrada es 32'h8
+        CLK = 0;
+        //Resultado esperado: PC_Out = 32'h00000004
+        #100
+        CLK = 1;
+        //Resultado esperado: PC_Out = 32'h00000008
+        
+        
+        #100
+        PC_In = 32'hc; //Se define que el PC de entrada es 32'hc
+        CLK = 0;
+        //Resultado esperado: PC_Out = 32'h00000008
+        #100
+        CLK = 1;
+        //Resultado esperado: PC_Out = 32'h0000000C
+        
         #100
         $finish;
     end

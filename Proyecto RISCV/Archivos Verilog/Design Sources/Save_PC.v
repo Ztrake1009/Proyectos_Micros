@@ -1,22 +1,23 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 11.10.2023 18:55:28
-// Design Name: 
-// Module Name: Save_PC
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+/*
+
+Funcionalidad:
+En este bloque se espera guardar el nuevo PC según lo que se retornó de
+la suma del anterior PC mas 4 en el modulo PCplus4.
+
+Entradas:
+Variable CLK (Reloj del sistema).
+Variable RST (Señal de reset).
+Variable PC_In (Nuevo PC a guardar en el PC general).
+
+Salidas:
+Variable PC_Out (Sale el nuevo PC guardado como general).
+
+Razón:
+Se crea para poder actualizar y almacenar el nuevo PC a utilizar por la microarquitectura.
+
+*/
 //////////////////////////////////////////////////////////////////////////////////
 
 

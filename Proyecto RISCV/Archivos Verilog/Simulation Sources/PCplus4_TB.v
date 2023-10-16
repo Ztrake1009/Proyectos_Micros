@@ -1,22 +1,12 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 11.10.2023 18:06:47
-// Design Name: 
-// Module Name: PCplus4_TB
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+/*
+
+Objetivo:
+En este bloque se espera simular correctamente la suma de 4 al PC
+para seguir con la siguiente instruccion.
+
+*/  
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -39,16 +29,25 @@ module PCplus4_TB(
     //Se declaran diferentes instrucciones entrantes
     initial begin
         PC = 32'h0;
+        //Resultado esperado: 32'h00000004
+        
         #100
         PC = 32'h4;
+        //Resultado esperado: 32'h00000008
+        
         #100
         PC = 32'h8;
+        //Resultado esperado: 32'h0000000C
+        
         #100
         PC = 32'hc;
+        //Resultado esperado: 32'h00000010
+        
         #100
         PC = 32'h10;
+        //Resultado esperado: 32'h00000014
+        
         #100
         $finish;
     end
-    
 endmodule
