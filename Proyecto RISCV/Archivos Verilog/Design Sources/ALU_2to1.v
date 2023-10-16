@@ -14,7 +14,7 @@ Variable ALUControl (Señal para selecionar la operacion a realizar).
 Salidas:
 Variable Out_ALU (Sale la operacion realizada por la ALU).
 
-Razón:
+Razon:
 Se crea para poder realizar las operaciones que debe soportar la microarquitectura.
 
 */

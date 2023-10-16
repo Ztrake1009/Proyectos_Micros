@@ -12,7 +12,7 @@ Variable Extender (Entrada de 12 bits).
 Salidas:
 Variable Extendido (Sale la entrada de 12 bits extendida a 32 bits).
 
-Razón:
+Razon:
 Se utiliza debido a que RISCV se maneja con 32 bits, por lo que es necesario una extension.
 
 */

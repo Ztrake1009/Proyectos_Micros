@@ -20,7 +20,7 @@ Variable ImmReg (Salida para activar el MUX que controla si se hacen operaciones
 Variable ALUSrc (Salida para activar el MUX que controla si se hacen operaciones tipo S-I o tipo R).
 Variable MemToReg (Salida para activar el MUX que controla si se hacen loaders o las otras operaciones).
 
-Razón:
+Razon:
 Se crea para indicarle a los modulos que operaciones realizar segun el formato de cada instruccion.
 
 */

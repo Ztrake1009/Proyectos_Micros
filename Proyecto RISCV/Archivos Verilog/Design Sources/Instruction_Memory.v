@@ -14,7 +14,7 @@ Variable PC (Direccion de la instruccion que se lee en ese momento).
 Salidas:
 Variable Inst (Sale la instruccion que se lea en la direccion especificada).
 
-Razón:
+Razon:
 Se crea para poder observar las instrucciones que debe realizar la microarquitectura diseñada.
 
 */

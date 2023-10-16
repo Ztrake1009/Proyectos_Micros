@@ -12,7 +12,7 @@ Variable Extender (Entrada de 20 bits).
 Salidas:
 Variable Extendido (Sale la entrada de 20 bits extendida a 32 bits).
 
-Razón:
+Razon:
 Se utiliza debido a que RISCV se maneja con 32 bits, por lo que es necesario una extension,
 sin embargo, este bloque solo es necesario para instrucciones tipo U, entre las operaciones a realizar
 solo se encuentra una LUI, la cual debido a que guarda los 20 bits a la izquierda, entonces la extensión

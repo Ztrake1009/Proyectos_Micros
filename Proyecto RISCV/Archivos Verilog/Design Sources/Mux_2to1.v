@@ -14,7 +14,7 @@ Variable Selector (Utilizado para seleccionar entre alguna de las dos entradas).
 Salidas:
 Variable Out_Mux (Sale la entrada A o la B según el selector usado).
 
-Razón:
+Razon:
 Se crea para poder seleccionar entre las distintas instrucciones a realizar,
 por ejemplo, un mux se va a utilizar para seleccionar entre operaciones tipo S y tipo I.
 

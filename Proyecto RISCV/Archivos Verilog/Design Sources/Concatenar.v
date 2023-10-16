@@ -13,7 +13,7 @@ Variable Num_B (Entrada B de 7 bits).
 Salidas:
 Variable Salida (Sale la concatenación de las entradas A y B).
 
-Razón:
+Razon:
 Se crea para poder concatenar dos variables, este bloque se utiliza solamente
 a la hora de seleccionar entre el uso de instrucciones tipo I o S.
 

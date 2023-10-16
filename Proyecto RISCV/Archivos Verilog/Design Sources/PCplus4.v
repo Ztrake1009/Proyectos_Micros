@@ -13,7 +13,7 @@ Variable PC (PC que se está utilizando en ese momento).
 Salidas:
 Variable Next_PC (Sale el nuevo PC pero con una suma de 4).
 
-Razón:
+Razon:
 Se crea para poder seguir a la nueva instruccion u operacion por realizar.
 
 */

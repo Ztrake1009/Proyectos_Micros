@@ -14,7 +14,7 @@ Variable PC_In (Nuevo PC a guardar en el PC general).
 Salidas:
 Variable PC_Out (Sale el nuevo PC guardado como general).
 
-Razón:
+Razon:
 Se crea para poder actualizar y almacenar el nuevo PC a utilizar por la microarquitectura.
 
 */
