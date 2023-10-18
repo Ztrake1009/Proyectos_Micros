@@ -3,7 +3,7 @@
 /*
 
 Objetivo:
-En este bloque se espera simular correctamente la actualizacion del PC
+En este TestBench se espera simular correctamente la actualizacion del PC
 anterior al nuevo PC.
 
 */  
@@ -55,7 +55,6 @@ module Save_PC_TB(
         #100
         CLK = 1;
         //Resultado esperado: PC_Out = 32'h00000008
-        
         
         #100
         PC_In = 32'hc; //Se define que el PC de entrada es 32'hc

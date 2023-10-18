@@ -1,22 +1,14 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Company: 
-// Engineer: 
-// 
-// Create Date: 15.10.2023 21:55:31
-// Design Name: 
-// Module Name: ALU_2to1_TB
-// Project Name: 
-// Target Devices: 
-// Tool Versions: 
-// Description: 
-// 
-// Dependencies: 
-// 
-// Revision:
-// Revision 0.01 - File Created
-// Additional Comments:
-// 
+/*
+
+Objetivo:
+En este TestBench se espera simular correctamente el funcionamiento
+de una ALU utilizando dos numeros de entrada y una señal de control.
+Esta ALU debe realizar operaciones de Suma, Resta, AND, XOR y SLL
+(Logical Shift Left).
+
+*/  
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -77,7 +69,7 @@ module ALU_2to1_TB(
         //Resultado esperado: 32'hFFFF0000
         
         #100
-        //Se realiza un Logical Shift Left
+        //Se realiza un SLL (Logical Shift Left)
         ALUControl=3'd4;
         In_A = 32'h0000000F;
         In_B = 32'd3;

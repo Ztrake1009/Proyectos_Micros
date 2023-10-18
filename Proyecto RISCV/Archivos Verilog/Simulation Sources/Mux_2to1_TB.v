@@ -3,7 +3,7 @@
 /*
 
 Objetivo:
-En este bloque se espera simular correctamente la seleccion entre
+En este TestBench se espera simular correctamente la seleccion entre
 dos entradas segun el selector utilizado.
 
 */ 

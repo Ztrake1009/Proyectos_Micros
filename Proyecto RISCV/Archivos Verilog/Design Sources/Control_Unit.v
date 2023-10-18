@@ -28,8 +28,8 @@ Se crea para indicarle a los modulos que operaciones realizar segun el formato d
 
 
 module Control_Unit(
-    input [6:0] Funct_Siete, //Funct7 necesario para diferenciar entre ADD y SUB para instrucciones tipo R
-    input [2:0] Funct_Tres, //Funct3 para seleccionar la operacion a realizar segun el formato de la instruccion
+    input [6:0] Funct7, //Funct7 necesario para diferenciar entre ADD y SUB para instrucciones tipo R
+    input [2:0] Funct3, //Funct3 para seleccionar la operacion a realizar segun el formato de la instruccion
     input [6:0] Opcode, //Opcode necesario para determinar el formato de la instruccion por realizar
     output reg RegWrite, //Salida para habilitar la escritura en registro destino
     output reg [2:0] ALUControl, //Salida para seleccionar la operacion a realizar por la ALU
@@ -54,27 +54,27 @@ module Control_Unit(
                 MemToReg = 1'b0;
                 
                 //En caso de que sea una suma o resta
-                if (Funct_Tres == 3'b000) begin
-                    if (Funct_Siete == 7'b0000000) begin
+                if (Funct3 == 3'b000) begin
+                    if (Funct7 == 7'b0000000) begin
                         ALUControl = 3'b000; //Se le indica a la ALU que realice una suma
                     end
-                    else if (Funct_Siete == 7'b0100000) begin
+                    else if (Funct7 == 7'b0100000) begin
                         ALUControl = 3'b001; //Se le indica a la ALU que realice una resta
                     end
                 end
                 
                 //En caso de que sea una AND
-                else if (Funct_Tres == 3'b111) begin
+                else if (Funct3 == 3'b111) begin
                     ALUControl = 3'b010; //Se le indica a la ALU que realice una AND
                 end
                 
                 //En caso de que sea una XOR
-                else if (Funct_Tres == 3'b100) begin
+                else if (Funct3 == 3'b100) begin
                     ALUControl = 3'b011; //Se le indica a la ALU que realice una XOR
                 end
                 
                 //En caso de que sea un SLL (Logical Shift Left)
-                else if (Funct_Tres == 3'b001) begin
+                else if (Funct3 == 3'b001) begin
                     ALUControl = 3'b100; //Se le indica a la ALU que realice un SLL
                 end
             end
@@ -83,7 +83,7 @@ module Control_Unit(
             7'b0100011:
             begin
                 //En caso de que sea un SW
-                if (Funct_Tres == 3'b010) begin
+                if (Funct3 == 3'b010) begin
                     //Se definen las salidas necesarias para una operacion SW
                     RegWrite = 1'b0;
                     ALUControl = 3'b000;

@@ -3,7 +3,7 @@
 /*
 
 Objetivo:
-En este bloque se espera simular correctamente la extension de
+En este TestBench se espera simular correctamente la extension de
 la palabra de 20 bits a 32 bits obicando los 20 bits a la izquierda.
 
 */  

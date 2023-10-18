@@ -3,7 +3,7 @@
 /*
 
 Objetivo:
-En este bloque se espera simular correctamente la suma de 4 al PC
+En este TestBench se espera simular correctamente la suma de 4 al PC
 para seguir con la siguiente instruccion.
 
 */  

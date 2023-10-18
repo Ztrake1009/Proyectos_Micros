@@ -7,8 +7,6 @@ En este bloque se espera que se lea correctamente cada instruccion a realizar,
 estas intrucciones provienen de un archivo txt con cada instruccion en hexadecimal.
 
 Entradas:
-Variable CLK (Reloj del sistema).
-Variable RST (Señal de reset).
 Variable PC (Direccion de la instruccion que se lee en ese momento).
 
 Salidas:
@@ -22,12 +20,11 @@ Se crea para poder observar las instrucciones que debe realizar la microarquitec
 
 
 module Instruction_Memory(
-    input CLK, RST, //Reloj del sistema y el Reset
     input [31:0] PC, //Direccion de la instruccion
     output reg [31:0] Inst //Instruccion en la direccion
     );
     
-    reg[31:0] mem[255:0]; //Variable interna para el banco de memoria de 256 espacios
+    reg [31:0] mem [255:0]; //Variable interna para el banco de memoria de 256 espacios
     
     //Lectura del archivo txt con las instrucciones
     always @(*) begin

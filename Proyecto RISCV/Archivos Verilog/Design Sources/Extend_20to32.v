@@ -28,7 +28,7 @@ module Extend_20to32(
     );
     
     //Variable a utilizar para llenar con ceros la salida
-    reg[11:0] Ceros = 12'h000;
+    reg [11:0] Ceros = 12'h000;
     
     //Toma la entrada y la posiciona en los 20 bits más significativos de la salida
     //Luego adjunta a los 12 bits menos significativos ceros

@@ -25,7 +25,7 @@ module Extend_12to32(
     );
     
     //Variable a utilizar para llenar con ceros la salida
-    reg[19:0] Ceros = 20'h00000;
+    reg [19:0] Ceros = 20'h00000;
     
     //Concatena 20 ceros a la entrada dejando la entrada a la derecha
     assign Extendido = {Ceros,Extender};
