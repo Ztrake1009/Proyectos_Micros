@@ -8,8 +8,8 @@ que operaciones realizar segun el formato de la instruccion.
 
 Entradas:
 Variable Func_Siete (Variable que diferencia entre ADD y SUB para instrucciones tipo R).
-Variable Opcode (Variable que identifica el formato de la instruccion a realizar).
 Variable Func_Tres (Variable que diferencia que operacion realizar en un mismo formato de instrucciones).
+Variable Opcode (Variable que identifica el formato de la instruccion a realizar).
 
 Salidas:
 Variable Reg_Write (Salida para habilitar la escritura en registro destino).
@@ -28,15 +28,16 @@ Se crea para indicarle a los modulos que operaciones realizar segun el formato d
 
 
 module Control_Unit(
-    input [6:0] Funct_Siete, Opcode, //Funct7 y Opcode necesarios para determinar las operaciones a realizar
-    input [2:0] Funct_Tres, //Funct3 para seleccionar la operacion
+    input [6:0] Funct_Siete, //Funct7 necesario para diferenciar entre ADD y SUB para instrucciones tipo R
+    input [2:0] Funct_Tres, //Funct3 para seleccionar la operacion a realizar segun el formato de la instruccion
+    input [6:0] Opcode, //Opcode necesario para determinar el formato de la instruccion por realizar
     output reg RegWrite, //Salida para habilitar la escritura en registro destino
     output reg [2:0] ALUControl, //Salida para seleccionar la operacion a realizar por la ALU
     output reg MemWrite, //Salida para habilitar la escritura en memoria
     output reg WDSrc, //Salida para activar el MUX que controla si se hacen operaciones tipo U o las otras
     output reg ImmReg, //Salida para activar el MUX que controla si se hacen operaciones tipo S o tipo I
     output reg ALUSrc, //Salida para activar el MUX que controla si se hacen operaciones tipo S-I o tipo R
-    output reg MemToReg //Salida para activar el MUX que controla si se hacen loaders o las otras operaciones
+    output reg MemToReg //Salida para activar el MUX que controla si se hacen loaders (lw) o las otras operaciones
     );
     
     always @(*) begin //Siempre que haya un cambio
@@ -81,20 +82,22 @@ module Control_Unit(
             //Instrucciones Formato S
             7'b0100011:
             begin
-                //Se definen las salidas necesarias para una instruccion tipo S
-                RegWrite = 1'b1;
-                ALUControl = 3'b000;
-                MemWrite = 1'b0;
-                WDSrc = 1'b1;
-                ImmReg = 1'b1;
-                ALUSrc = 1'b0;
-                MemToReg = 1'b0;
+                //En caso de que sea un SW
+                if (Funct_Tres == 3'b010) begin
+                    //Se definen las salidas necesarias para una operacion SW
+                    RegWrite = 1'b0;
+                    ALUControl = 3'b000;
+                    MemWrite = 1'b1;
+                    ImmReg = 1'b1;
+                    ALUSrc = 1'b0;
+                    MemToReg = 1'b0;
+                end
             end
             
             //Instrucciones Formato U
             7'b0110111:
             begin
-                //Se definen las salidas necesarias para una instruccion tipo S
+                //Se definen las salidas necesarias para una instruccion tipo U
                 RegWrite = 1'b1;
                 MemWrite = 1'b0;
                 WDSrc = 1'b0;
@@ -102,7 +105,7 @@ module Control_Unit(
             end
             
             //Instrucciones Formato I, ADDI y LI
-            7'b0100011:
+            7'b0010011:
             begin
                 //Se definen las salidas necesarias para una instruccion tipo I para ADDI y LI
                 RegWrite = 1'b1;
@@ -115,12 +118,12 @@ module Control_Unit(
             end
             
             //Instrucciones Formato I, LW
-            7'b0100011:
+            7'b0000011:
             begin
                 //Se definen las salidas necesarias para una instruccion tipo I para LW
                 RegWrite = 1'b1;
                 ALUControl = 3'b000;
-                MemWrite = 1'b1;
+                MemWrite = 1'b0;
                 WDSrc = 1'b1;
                 ImmReg = 1'b0;
                 ALUSrc = 1'b0;
