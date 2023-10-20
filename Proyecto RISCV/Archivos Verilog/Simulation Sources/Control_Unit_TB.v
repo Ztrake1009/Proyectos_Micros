@@ -158,12 +158,28 @@ module Control_Unit_TB(
         #100
         //Prueba de instruccion tipo I, para realizar una operacion ADDI
         Funct7 = 7'bX;
+        Funct3 = 3'b000;
+        Opcode = 7'b0010011;
+        /*
+        Resultados esperados:
+        RegWrite = 1'b1
+        ALUControl = 3'b000
+        MemWrite = 1'b0
+        WDSrc = 1'b0
+        ImmReg = 1'bX
+        ALUSrc = 1'bX
+        MemToReg = 1'b0
+        */
+        
+        #100
+        //Prueba de instruccion tipo I, para realizar una operacion ANDI
+        Funct7 = 7'bX;
         Funct3 = 3'b111;
         Opcode = 7'b0010011;
         /*
         Resultados esperados:
         RegWrite = 1'b1
-        ALUControl = 3'bX
+        ALUControl = 3'b010
         MemWrite = 1'b0
         WDSrc = 1'b0
         ImmReg = 1'bX

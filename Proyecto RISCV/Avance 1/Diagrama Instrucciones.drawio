@@ -1,4 +1,4 @@
-<mxfile host="Electron" modified="2023-10-16T05:31:03.076Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.2 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="eWQIHDUH5lGiZ30gyN_Y" version="22.0.2" type="device">
+<mxfile host="Electron" modified="2023-10-18T18:54:40.021Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.2 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="mULlr_jWJR8wWaJ9RbfE" version="22.0.2" type="device">
   <diagram name="Página-1" id="6GFKaBrxD16RPJuChNok">
     <mxGraphModel dx="1418" dy="820" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="4681" math="0" shadow="0">
       <root>
@@ -46,7 +46,7 @@
         <mxCell id="DCOvYSJb3xVZd7ZvaFjD-19" value="RD" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="1240" y="425" width="40" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="DCOvYSJb3xVZd7ZvaFjD-22" value="Wd" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;" parent="1" vertex="1">
+        <mxCell id="DCOvYSJb3xVZd7ZvaFjD-22" value="WD" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;" parent="1" vertex="1">
           <mxGeometry x="1120" y="465" width="40" height="30" as="geometry" />
         </mxCell>
         <mxCell id="DCOvYSJb3xVZd7ZvaFjD-25" value="" style="triangle;whiteSpace=wrap;html=1;rotation=-90;fillColor=none;" parent="1" vertex="1">
@@ -592,23 +592,6 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="ilZmr5tKBwu7MJHxmIX4-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.875;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="ilZmr5tKBwu7MJHxmIX4-2" target="DCOvYSJb3xVZd7ZvaFjD-17" edge="1">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="EhO7lGmhbS3mLJcgiTRw-1" value="" style="triangle;whiteSpace=wrap;html=1;rotation=-90;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="370" y="500" width="20" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="EhO7lGmhbS3mLJcgiTRw-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="EhO7lGmhbS3mLJcgiTRw-3" target="EhO7lGmhbS3mLJcgiTRw-1" edge="1">
-          <mxGeometry relative="1" as="geometry">
-            <mxPoint x="380" y="540" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="EhO7lGmhbS3mLJcgiTRw-3" value="CLK" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=0" parent="1" vertex="1">
-          <mxGeometry x="360" y="540" width="40" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="EhO7lGmhbS3mLJcgiTRw-4" value="RESET" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=12;fontStyle=0" parent="1" vertex="1">
-          <mxGeometry x="320" y="540" width="40" height="20" as="geometry" />
-        </mxCell>
-        <mxCell id="EhO7lGmhbS3mLJcgiTRw-5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.167;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="EhO7lGmhbS3mLJcgiTRw-4" target="DCOvYSJb3xVZd7ZvaFjD-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="5cbxIwjPfov2Kz73Dy-7-2" value="" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" parent="1" target="DCOvYSJb3xVZd7ZvaFjD-29" edge="1">

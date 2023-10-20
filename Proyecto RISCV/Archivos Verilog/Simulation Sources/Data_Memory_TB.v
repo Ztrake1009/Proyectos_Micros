@@ -18,7 +18,6 @@ module Data_Memory_TB(
     reg [31:0] Address; //Direccion de memoria con la que se trabaja 
     reg [31:0] WD; //Datos a escribir
     reg MemWrite; //Control de escritura
-
     
     //Outputs
     wire [31:0] RD; //Datos leidos
@@ -36,34 +35,55 @@ module Data_Memory_TB(
     
     initial begin
         //Se inician todas las variables 
-        CLK = 0; 
+        RST = 0;
+        CLK = 0;
+        
+        #10
         RST = 1;
         //Toda la memoria esta en 0 por el RESET
         
-        #100;
+        #10
         RST = 0;
         
-        //Se activa la escritura y se escribe 100 en la direccion FFD0
+        //Se activa la escritura y se escribe 14 en la direccion FFE8
         MemWrite = 1;
-        WD = 32'd100;
-        Address = 32'hFFD0;
+        WD = 32'd14;
+        Address = 32'hFFE8;
         /*
         Resultado esperado:
-        RD = 32'd100
-        */
-    
-        #100;    
-        //Se desactiva la escritura y se intenta escribir 135 en FFD0
-        MemWrite = 0; 
-        WD = 32'd135;
-        /*
-        Resultado esperado:
-        No se espera ningun cambio
-        RD = 32'd100
+        RD = 32'd14
         */
         
-        #100;
+        #10;    
+        //Se activa la escritura y se escribe 7 en la direccion FFE4
+        MemWrite = 1;
+        WD = 32'd7;
+        Address = 32'hFFE4;
+        /*
+        Resultado esperado:
+        RD = 32'd7
+        */
+        
+        #10;    
+        //Se desactiva la escritura y se lee la direccion FFE8
+        MemWrite = 0;
+        Address = 32'hFFE8;
+        /*
+        Resultado esperado:
+        RD = 32'd14
+        */
+        
+        #10;    
+        //Se desactiva la escritura y se lee la direccion FFE4
+        MemWrite = 0;
+        Address = 32'hFFE4;
+        /*
+        Resultado esperado:
+        RD = 32'd7
+        */
+        
+        #10;
         $finish;
     end
-    always #20 CLK = ~CLK;
+    always #5 CLK = ~CLK;
 endmodule

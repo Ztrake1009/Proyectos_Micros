@@ -13,7 +13,7 @@ Salidas:
 Variable Inst (Sale la instruccion que se lea en la direccion especificada).
 
 Razon:
-Se crea para poder observar las instrucciones que debe realizar la microarquitectura diseñada.
+Se crea para poder observar las instrucciones que debe realizar la microarquitectura disenada.
 
 */
 //////////////////////////////////////////////////////////////////////////////////
@@ -26,9 +26,12 @@ module Instruction_Memory(
     
     reg [31:0] mem [255:0]; //Variable interna para el banco de memoria de 256 espacios
     
+    initial begin
+        $readmemh("C:/Proyecto_RISCV_VIVADO/Proyecto/Instrucciones.txt", mem, 0);
+    end
+    
     //Lectura del archivo txt con las instrucciones
     always @(*) begin
-        $readmemh("C:/Proyecto_RISCV_VIVADO/Proyecto/Instrucciones.txt", mem, 0);
         Inst = mem[PC];
     end
 endmodule

@@ -49,13 +49,13 @@ module Register_File(
     end
     
     //Siempre que haya un cambio en las entradas A1 y A2, se lee la informacion en dichos registros
-    always @(*) begin 
-    RD1 <= REGISTERS[A1];
-    RD2 <= REGISTERS[A2];  
+    always @(*) begin
+        RD1 <= REGISTERS[A1];
+        RD2 <= REGISTERS[A2];  
     end
 
     //Siempre que haya un flanco positivo del Clock se va a generar una escritura si el RegWrite esta activo o se active RST 
-    always @(posedge CLK)begin 
+    always @(posedge CLK) begin 
         if (RST) begin //Si se activa el Reset (RST)
             //Reiniciando todos los registros en 0       
             for (i=0; i<32; i=i+1) begin

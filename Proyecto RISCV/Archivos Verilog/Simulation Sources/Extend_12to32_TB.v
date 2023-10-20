@@ -43,6 +43,10 @@ module Extend_12to32_TB(
         //Resultado esperado: 32'h000000FA
         
         #100
+        Extender = 12'hfd0; //Prueba con el numero -48
+        //Resultado esperado: 32'hFFFFFFD0
+        
+        #100
         $finish;
     end
 endmodule

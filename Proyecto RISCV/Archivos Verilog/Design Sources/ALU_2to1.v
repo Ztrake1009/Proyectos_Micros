@@ -9,7 +9,7 @@ las operaciones de Suma, Resta, AND, XOR y desplazamiento a la izquierda.
 Entradas:
 Variable In_A (Operando A de la ALU).
 Variable In_B (Operando B de la ALU).
-Variable ALUControl (Señal para seleccionar la operacion a realizar).
+Variable ALUControl (Senal para seleccionar la operacion a realizar).
 
 Salidas:
 Variable Out_ALU (Sale la operacion realizada por la ALU).

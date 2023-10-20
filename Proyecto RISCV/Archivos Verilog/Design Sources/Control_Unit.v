@@ -3,7 +3,7 @@
 /*
 
 Funcionalidad:
-En este bloque se espera controlar todas señales que indican a los modulos
+En este bloque se espera controlar todas senales que indican a los modulos
 que operaciones realizar segun el formato de la instruccion.
 
 Entradas:
@@ -104,17 +104,43 @@ module Control_Unit(
                 MemToReg = 1'b0;
             end
             
-            //Instrucciones Formato I, ADDI y LI
+            //Instrucciones Formato I, ADDI, ANDI y LI
             7'b0010011:
             begin
-                //Se definen las salidas necesarias para una instruccion tipo I para ADDI y LI
-                RegWrite = 1'b1;
-                ALUControl = 3'b000;
-                MemWrite = 1'b0;
-                WDSrc = 1'b1;
-                ImmReg = 1'b0;
-                ALUSrc = 1'b0;
-                MemToReg = 1'b0;
+                //En caso de que sea una ADDI
+                if (Funct3 == 3'b000) begin
+                    RegWrite = 1'b1;
+                    ALUControl = 3'b000;
+                    MemWrite = 1'b0;
+                    WDSrc = 1'b1;
+                    ImmReg = 1'b0;
+                    ALUSrc = 1'b0;
+                    MemToReg = 1'b0;
+                end
+                
+                //En caso de que sea una ANDI
+                else if (Funct3 == 3'b111) begin
+                    //Se definen las salidas necesarias para una operacion SW
+                    RegWrite = 1'b1;
+                    ALUControl = 3'b010;
+                    MemWrite = 1'b0;
+                    WDSrc = 1'b1;
+                    ImmReg = 1'b0;
+                    ALUSrc = 1'b0;
+                    MemToReg = 1'b0;
+                end
+                
+                //En caso de que sea una LI
+                else if (Funct3 == 3'b111) begin
+                    //Se definen las salidas necesarias para una operacion SW
+                    RegWrite = 1'b1;
+                    ALUControl = 3'b000;
+                    MemWrite = 1'b0;
+                    WDSrc = 1'b1;
+                    ImmReg = 1'b0;
+                    ALUSrc = 1'b0;
+                    MemToReg = 1'b0;
+                end
             end
             
             //Instrucciones Formato I, LW

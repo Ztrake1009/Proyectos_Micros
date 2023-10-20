@@ -12,7 +12,6 @@ segun el cambio en la direccion cada cierto tiempo.
 
 module Instruction_Memory_TB(
     );
-    
     //Inputs
     reg [31:0] PC; //Direccion de la instruccion
         

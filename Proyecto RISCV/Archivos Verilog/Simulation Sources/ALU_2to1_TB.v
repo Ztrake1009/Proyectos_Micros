@@ -4,7 +4,7 @@
 
 Objetivo:
 En este TestBench se espera simular correctamente el funcionamiento
-de una ALU utilizando dos numeros de entrada y una señal de control.
+de una ALU utilizando dos numeros de entrada y una senal de control.
 Esta ALU debe realizar operaciones de Suma, Resta, AND, XOR y SLL
 (Logical Shift Left).
 

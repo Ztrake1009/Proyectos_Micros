@@ -23,10 +23,25 @@ module Extend_12to32(
     input [11:0] Extender, //Entrada de 12 bits
     output [31:0] Extendido //Salida de 32 bits
     );
+
+    reg [19:0] Relleno;
+    
+    //Se revisa el signo del numero a extender    
+    wire Signo;
+    assign Signo = Extender[11];
     
     //Variable a utilizar para llenar con ceros la salida
-    reg [19:0] Ceros = 20'h00000;
+    always @(*) begin
+        //Si es un numero positivo, lo rellena con ceros
+        if (Signo == 0) begin
+            Relleno <= 20'h00000;
+        end
+        //Si es un numero negativo, lo rellena con unos
+        else if (Signo == 1) begin
+            Relleno <= 20'hFFFFF;
+        end
+    end
     
     //Concatena 20 ceros a la entrada dejando la entrada a la derecha
-    assign Extendido = {Ceros,Extender};
+    assign Extendido = {Relleno,Extender};
 endmodule

@@ -11,7 +11,7 @@ Variable Num_A (Entrada A de 5 bits).
 Variable Num_B (Entrada B de 7 bits).
 
 Salidas:
-Variable Salida (Sale la concatenación de las entradas A y B).
+Variable Salida (Sale la concatenacion de las entradas A y B).
 
 Razon:
 Se crea para poder concatenar dos variables, este bloque se utiliza solamente

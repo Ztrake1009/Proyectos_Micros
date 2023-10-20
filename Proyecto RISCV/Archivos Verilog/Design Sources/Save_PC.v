@@ -3,12 +3,12 @@
 /*
 
 Funcionalidad:
-En este bloque se espera guardar el nuevo PC según lo que se retornó de
+En este bloque se espera guardar el nuevo PC segun lo que se retorno de
 la suma del anterior PC mas 4 en el modulo PCplus4.
 
 Entradas:
 Variable CLK (Reloj del sistema).
-Variable RST (Señal de reset).
+Variable RST (Senal de reset).
 Variable PC_In (Nuevo PC a guardar en el PC general).
 
 Salidas:

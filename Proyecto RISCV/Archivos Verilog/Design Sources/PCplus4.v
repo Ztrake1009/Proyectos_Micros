@@ -3,12 +3,11 @@
 /*
 
 Funcionalidad:
-En este bloque se espera que según la señal de PC entrante
+En este bloque se espera que segun la senal de PC entrante
 pueda salir un PC nuevo pero sumado con 4.
 
-
 Entradas:
-Variable PC (PC que se está utilizando en ese momento).
+Variable PC (PC que se esta utilizando en ese momento).
 
 Salidas:
 Variable Next_PC (Sale el nuevo PC pero con una suma de 4).
