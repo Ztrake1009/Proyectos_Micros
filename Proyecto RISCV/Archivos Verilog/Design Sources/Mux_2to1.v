@@ -12,7 +12,7 @@ Variable Num_B (Entrada B).
 Variable Selector (Utilizado para seleccionar entre alguna de las dos entradas).
 
 Salidas:
-Variable Out_Mux (Sale la entrada A o la B según el selector usado).
+Variable Out_Mux (Sale la entrada A o la B segun el selector usado).
 
 Razon:
 Se crea para poder seleccionar entre las distintas instrucciones a realizar,
@@ -29,7 +29,7 @@ module Mux_2to1(
     output reg [31:0] Out_Mux //Salida del mux
     );
     
-    always @ (*) begin //Siempre que haya un cmabio en las entradas 
+    always @ (*) begin //Siempre que haya un cambio en las entradas 
         case (Selector)  
             1'd0 : Out_Mux <= Num_A; //Si el selector esta en 0 selecciona la opcion 1 
             1'd1 : Out_Mux <= Num_B; //Si el selector esta en 1 selecciona la opcion 2 

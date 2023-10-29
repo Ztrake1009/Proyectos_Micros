@@ -24,7 +24,7 @@ a la hora de seleccionar entre el uso de instrucciones tipo I o S.
 module Concatenar(
     input [4:0] Num_A, //Entrada 5 bits
     input [6:0] Num_B, //Entrada 7 bits
-    output [11:0] Salida //Salida 32 bits
+    output [11:0] Salida //Salida 12 bits
     );
     
     //Concatena las dos entradas

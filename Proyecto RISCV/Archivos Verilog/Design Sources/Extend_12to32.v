@@ -24,7 +24,7 @@ module Extend_12to32(
     output [31:0] Extendido //Salida de 32 bits
     );
 
-    reg [19:0] Relleno;
+    reg [19:0] Relleno; //Variable interna, sirve para rellenar la palabra segun si el numero es positivo o negativo.
     
     //Se revisa el signo del numero a extender    
     wire Signo;
