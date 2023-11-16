@@ -61,7 +61,7 @@ def Interfaz(ventana):
     boton_Cargar = tk.Button(ventana, text="Cargar Archivo CSV", command=abrir_Excel)
     boton_Cargar.pack(side="top")
 
-# Función: Abrir los archivos de excel en formato cvs.
+# Función para abrir los archivos de excel en formato csv.
 def abrir_Excel():
     global letras_Carga
     global contador_R_Carga
@@ -101,6 +101,7 @@ def abrir_Excel():
 
     Sel_Modo()
 
+# Función para seleccionar el modo de operación por medio de dos botones.
 def Sel_Modo():
     global boton_Modo1
     global boton_Modo2
@@ -110,16 +111,19 @@ def Sel_Modo():
     boton_Modo2 = tk.Button(ventana, text="Ejecutar Modo de Acomodo 2", command=Modo2)
     boton_Modo2.pack(side="top")
 
+# Función que le indica a la función Dibujar lo que se necesita para el modo 1.
 def Modo1():
     global Modo_Seleccionado
     Modo_Seleccionado = 1
     Dibujar(Modo_Seleccionado)
 
+# Función que le indica a la función Dibujar lo que se necesita para el modo 2.
 def Modo2():
     global Modo_Seleccionado
     Modo_Seleccionado = 2
     Dibujar(Modo_Seleccionado)
 
+# Función que dibuja las matrices iniciales según el 
 def Dibujar(Modo_Seleccionado):
     global boton_Cargar
     global boton_Modo1
@@ -200,7 +204,7 @@ def Dibujar(Modo_Seleccionado):
         grua = lienzo.create_oval(X_Actual, Y_Actual, X_Final, Y_Final, width=1, fill="orange")
         
         # Botón para iniciar el acomodo 2.
-        boton_Iniciar = tk.Button(ventana, text="Iniciar Acomodo", command="""acomodo_Cajas_2""")
+        boton_Iniciar = tk.Button(ventana, text="Iniciar Acomodo", command=acomodo_Cajas_2)
         boton_Iniciar.pack(side="top")
 
 # Inicializa las listas de suministros con espacios vacios.
@@ -219,7 +223,7 @@ def iniciar_Suministros():
         i += 1
 
     j = 0
-    while (j < 14):
+    while (j < 15):
         color = ""
         espacio = Suministro(0,0,color,False)
         lista_Suministro2.append(espacio)
@@ -357,153 +361,30 @@ def crear_Matriz_C(lienzo, matriz3):
 
             letra_actual += 1
 
-def acomodo_Cajas_1():
-    global boton_Iniciar
-    global mensaje_Interfaz
 
-    global lista_Suministro1
-    global lista_Suministro2
+##########################################################################################
+# Función para pintar la matriz de Carga según como está actualmente.
+def pintar_Matriz_CargaActual(lienzo, carga_actual):
+    letra_actual = 0
+    matriz3 = [[None for _ in range(tam_Matriz3)] for _ in range(tam_Matriz3)]
+    for fila_Matriz3 in range(tam_Matriz3):
+        for col_Matriz3 in range(tam_Matriz3):
+            x0 = tam_Bases + tam_Esp_Libre + (tam_Celdas * tamX_Matriz2) + (col_Matriz3 * tam_Celdas)
+            y0 = tam_Bases + tam_Esp_Libre + (tam_Celdas * tamY_Matriz1) + (fila_Matriz3 * tam_Celdas)
+            x1 = x0 + tam_Celdas
+            y1 = y0 + tam_Celdas
+            color = ident_Color(letra_actual, carga_actual)
+            matriz3[fila_Matriz3][col_Matriz3] = lienzo.create_rectangle(x0, y0, x1, y1, width=3, fill=color)
 
-    boton_Iniciar.destroy()
+            posx = x0
+            posy = y0
+            color = letras_Carga[letra_actual]
 
-    lectura_Inicial_Modo1()
+            letra_actual += 1
+##########################################################################################
 
-    tiempo = 1
-    #for pos_Carga_I, elem_Carga_I in enumerate(letras_Carga_Inicial):
-    for pos_Sum1, elem_Sum1 in enumerate(lista_Suministro1):
-        for pos_Carga, elem_Carga in enumerate(lista_Carga):
-            if (elem_Sum1.color == elem_Carga.color) and (elem_Carga.colocada == False):
-                X_Destino = elem_Sum1.posx
-                Y_Destino = elem_Sum1.posy
-                
-                # Se mueve primero hacia el espacio en suministro.
-                # Dentro de la función de mover_Motores se envía 0 para mover en X y 1 para mover en Y.
-                # Crea los hilos para mover los motores y tambien la interfaz.
-                hilo1 = threading.Thread(target=mover_Motores("X", X_Actual, X_Destino))
-                hilo2 = threading.Thread(target=mover_Motores("Y", Y_Actual, Y_Destino))
-                hilo3 = threading.Thread(target=mover_X_Interfaz(X_Destino))
-                hilo4 = threading.Thread(target=mover_Y_Interfaz(Y_Destino))
 
-                # Ejecuta el movimiento en X.
-                mensaje_Interfaz.config(text="Moviendo Grúa hacia la caja por recoger.")
-                # Inicia el primer hilo, mueve el motor de X.
-                hilo1.start()
-                # Espera a que el primer hilo termine antes de iniciar el tercer hilo.
-                hilo1.join()
-                # Inicia el tercer hilo, mueve la interfaz en X.
-                hilo3.start()
-                # Espera a que ambos hilos terminen.
-                hilo1.join()
-                hilo3.join()
-                
-                # Ejecuta el movimiento en Y
-                # Inicia el segundo hilo, mueve el motor de Y.
-                hilo2.start()
-                # Espera a que el segundo hilo termine antes de iniciar el cuarto hilo.
-                hilo2.join()
-                # Inicia el cuarto hilo, mueve la interfaz en Y.
-                hilo4.start()
-                # Espera a que ambos hilos terminen.
-                hilo2.join()
-                hilo4.join()
-
-                # Recoge la caja.
-                mensaje_Interfaz.config(text="Recogiendo caja.")
-                ventana.update()
-                # Llamar la función de activar el motor CD y activar el imán.
-                # Crear nuevo hilo que suba y baje el motor CD.
-
-                limpiar_Suministro1(X_Destino, Y_Destino, elem_Sum1)
-                ventana.update()
-
-                # Se definen los nuevos espacio donde se debe dejar la caja.
-                X_Destino = elem_Carga.posx
-                Y_Destino = elem_Carga.posy
-                
-                # Ahora se mueve hacia el espacio donde debe dejar la caja.
-                # Crea los hilos para mover los motores y tambien la interfaz.
-                hilo1 = threading.Thread(target=mover_Motores("X", X_Actual, X_Destino))
-                hilo2 = threading.Thread(target=mover_Motores("Y", Y_Actual, Y_Destino))
-                hilo3 = threading.Thread(target=mover_X_Interfaz(X_Destino))
-                hilo4 = threading.Thread(target=mover_Y_Interfaz(Y_Destino))
-                
-                # Ejecuta el movimiento en X.
-                mensaje_Interfaz.config(text="Moviendo Grúa hacia el espacio designado.")
-                # Inicia el primer hilo, mueve el motor de X.
-                hilo1.start()
-                # Espera a que el primer hilo termine antes de iniciar el tercer hilo.
-                hilo1.join()
-                # Inicia el tercer hilo, mueve la interfaz en X.
-                hilo3.start()
-                # Espera a que ambos hilos terminen.
-                hilo1.join()
-                hilo3.join()
-
-                # Ejecuta el movimiento en Y
-                # Inicia el segundo hilo, mueve el motor de Y.
-                hilo2.start()
-                # Espera a que el segundo hilo termine antes de iniciar el cuarto hilo.
-                hilo2.join()
-                # Inicia el cuarto hilo, mueve la interfaz en Y.
-                hilo4.start()
-                # Espera a que ambos hilos terminen.
-                hilo2.join()
-                hilo4.join()
-
-                # Suelta la caja.
-                mensaje_Interfaz.config(text="Dejando caja.")
-                ventana.update()
-                # Llamar la función de activar el motor CD y desactivar el imán.
-
-                actualizar_Carga(X_Destino, Y_Destino, elem_Carga.color)
-                ventana.update()
-                letras_Carga[pos_Carga] = 0
-
-                lista_Suministro1[pos_Sum1].color = ""
-                lista_Suministro1[pos_Sum1].ocupada = False
-                lista_Carga[pos_Carga].colocada = True
-
-                break
-
-    # Se mueve a la posición inicial.
-    mensaje_Interfaz.config(text="Volviendo a la posición inicial.")
-    ventana.update()
-
-    X_Destino = tam_Bases
-    Y_Destino = tam_Bases
-
-    # Crea los hilos para mover los motores y tambien la interfaz.
-    hilo1 = threading.Thread(target=mover_Motores("X", X_Actual, X_Destino))
-    hilo2 = threading.Thread(target=mover_Motores("Y", Y_Actual, Y_Destino))
-    hilo3 = threading.Thread(target=mover_X_Interfaz(X_Destino))
-    hilo4 = threading.Thread(target=mover_Y_Interfaz(Y_Destino))
-
-    # Ejecuta el movimiento en X.
-    # Inicia el primer hilo, mueve el motor de X.
-    hilo1.start()
-    # Espera a que el primer hilo termine antes de iniciar el tercer hilo.
-    hilo1.join()
-    # Inicia el tercer hilo, mueve la interfaz en X.
-    hilo3.start()
-    # Espera a que ambos hilos terminen.
-    hilo1.join()
-    hilo3.join()
-
-    # Ejecuta el movimiento en Y
-    # Inicia el segundo hilo, mueve el motor de Y.
-    hilo2.start()
-    # Espera a que el segundo hilo termine antes de iniciar el cuarto hilo.
-    hilo2.join()
-    # Inicia el cuarto hilo, mueve la interfaz en Y.
-    hilo4.start()
-    # Espera a que ambos hilos terminen.
-    hilo2.join()
-    hilo4.join()
-    
-    mensaje_Interfaz.config(text="Ha finalizado el acomodo.")
-    ventana.update()
-
-# Función para realizar la lectura de la zona de Suministro.
+# Función para realizar la lectura inicial de la zona de Suministro.
 def lectura_Inicial_Modo1():
     global lista_Suministro1
     global lista_Carga
@@ -552,7 +433,7 @@ def lectura_Inicial_Modo1():
 
         color = leer_QR()
 
-        if (color == "V"):
+        if (color == "L"):
             color = "white"
             lista_Suministro1[pos_Sum1].ocupada = False
         
@@ -691,6 +572,504 @@ def lectura_Inicial_Modo1():
     mensaje_Interfaz.config(text="En espera.")
     ventana.update()
 
+# Función que realiza la Distribución según Patrón (Modo de Acomodo 1).
+def acomodo_Cajas_1():
+    global boton_Iniciar
+    global mensaje_Interfaz
+
+    global lista_Suministro1
+    global lista_Suministro2
+
+    boton_Iniciar.destroy()
+
+    lectura_Inicial_Modo1()
+
+    tiempo = 1
+    for pos_Sum1, elem_Sum1 in enumerate(lista_Suministro1):
+        for pos_Carga, elem_Carga in enumerate(lista_Carga):
+            if (elem_Sum1.color == elem_Carga.color) and (elem_Carga.colocada == False):
+                X_Destino = elem_Sum1.posx
+                Y_Destino = elem_Sum1.posy
+                
+                # Se mueve primero hacia el espacio en suministro.
+                # Dentro de la función de mover_Motores se envía 0 para mover en X y 1 para mover en Y.
+                # Crea los hilos para mover los motores y tambien la interfaz.
+                hilo1 = threading.Thread(target=mover_Motores("X", X_Actual, X_Destino))
+                hilo2 = threading.Thread(target=mover_Motores("Y", Y_Actual, Y_Destino))
+                hilo3 = threading.Thread(target=mover_X_Interfaz(X_Destino))
+                hilo4 = threading.Thread(target=mover_Y_Interfaz(Y_Destino))
+
+                # Ejecuta el movimiento en X.
+                mensaje_Interfaz.config(text="Moviendo Grúa hacia la caja por recoger.")
+                # Inicia el primer hilo, mueve el motor de X.
+                hilo1.start()
+                """
+                # Espera a que el primer hilo termine antes de iniciar el tercer hilo.
+                hilo1.join()
+                """
+                # Inicia el tercer hilo, mueve la interfaz en X.
+                hilo3.start()
+                # Espera a que ambos hilos terminen.
+                hilo1.join()
+                hilo3.join()
+                
+                # Ejecuta el movimiento en Y
+                # Inicia el segundo hilo, mueve el motor de Y.
+                hilo2.start()
+                """
+                # Espera a que el segundo hilo termine antes de iniciar el cuarto hilo.
+                hilo2.join()
+                """
+                # Inicia el cuarto hilo, mueve la interfaz en Y.
+                hilo4.start()
+                # Espera a que ambos hilos terminen.
+                hilo2.join()
+                hilo4.join()
+
+                # Recoge la caja.
+                mensaje_Interfaz.config(text="Recogiendo caja.")
+                ventana.update()
+                # Llamar la función de activar el motor CD y activar el imán.
+                # Crear nuevo hilo que suba y baje el motor CD.
+
+                actualizar_Suministro1(X_Destino, Y_Destino)
+                agarre_grua(elem_Sum1.color, X_Actual, Y_Actual)
+                ventana.update()
+
+                # Se definen los nuevos espacio donde se debe dejar la caja.
+                X_Destino = elem_Carga.posx
+                Y_Destino = elem_Carga.posy
+                
+                # Ahora se mueve hacia el espacio donde debe dejar la caja.
+                # Crea los hilos para mover los motores y tambien la interfaz.
+                hilo1 = threading.Thread(target=mover_Motores("X", X_Actual, X_Destino))
+                hilo2 = threading.Thread(target=mover_Motores("Y", Y_Actual, Y_Destino))
+                hilo3 = threading.Thread(target=mover_X_Interfaz(X_Destino))
+                hilo4 = threading.Thread(target=mover_Y_Interfaz(Y_Destino))
+                
+                # Ejecuta el movimiento en X.
+                mensaje_Interfaz.config(text="Moviendo Grúa hacia el espacio designado.")
+                # Inicia el primer hilo, mueve el motor de X.
+                hilo1.start()
+                # Espera a que el primer hilo termine antes de iniciar el tercer hilo.
+                hilo1.join()
+                # Inicia el tercer hilo, mueve la interfaz en X.
+                hilo3.start()
+                # Espera a que ambos hilos terminen.
+                hilo1.join()
+                hilo3.join()
+
+                # Ejecuta el movimiento en Y
+                # Inicia el segundo hilo, mueve el motor de Y.
+                hilo2.start()
+                # Espera a que el segundo hilo termine antes de iniciar el cuarto hilo.
+                hilo2.join()
+                # Inicia el cuarto hilo, mueve la interfaz en Y.
+                hilo4.start()
+                # Espera a que ambos hilos terminen.
+                hilo2.join()
+                hilo4.join()
+
+                # Suelta la caja.
+                mensaje_Interfaz.config(text="Dejando caja.")
+                ventana.update()
+                # Llamar la función de activar el motor CD y desactivar el imán.
+
+                actualizar_Carga(X_Destino, Y_Destino, elem_Carga.color)
+                agarre_grua(elem_Sum1.color, X_Actual, Y_Actual)
+                ventana.update()
+
+                letras_Carga[pos_Carga] = 0
+                lista_Suministro1[pos_Sum1].color = ""
+                lista_Suministro1[pos_Sum1].ocupada = False
+                lista_Carga[pos_Carga].colocada = True
+
+                break
+
+    # Se mueve a la posición inicial.
+    mensaje_Interfaz.config(text="Volviendo a la posición inicial.")
+    ventana.update()
+
+    X_Destino = tam_Bases
+    Y_Destino = tam_Bases
+
+    # Crea los hilos para mover los motores y tambien la interfaz.
+    hilo1 = threading.Thread(target=mover_Motores("X", X_Actual, X_Destino))
+    hilo2 = threading.Thread(target=mover_Motores("Y", Y_Actual, Y_Destino))
+    hilo3 = threading.Thread(target=mover_X_Interfaz(X_Destino))
+    hilo4 = threading.Thread(target=mover_Y_Interfaz(Y_Destino))
+
+    # Ejecuta el movimiento en X.
+    # Inicia el primer hilo, mueve el motor de X.
+    hilo1.start()
+    # Espera a que el primer hilo termine antes de iniciar el tercer hilo.
+    hilo1.join()
+    # Inicia el tercer hilo, mueve la interfaz en X.
+    hilo3.start()
+    # Espera a que ambos hilos terminen.
+    hilo1.join()
+    hilo3.join()
+
+    # Ejecuta el movimiento en Y
+    # Inicia el segundo hilo, mueve el motor de Y.
+    hilo2.start()
+    # Espera a que el segundo hilo termine antes de iniciar el cuarto hilo.
+    hilo2.join()
+    # Inicia el cuarto hilo, mueve la interfaz en Y.
+    hilo4.start()
+    # Espera a que ambos hilos terminen.
+    hilo2.join()
+    hilo4.join()
+    
+    mensaje_Interfaz.config(text="Ha finalizado el acomodo.")
+    ventana.update()
+
+
+##########################################################################################
+def agarre_grua(letra,X_Actual,Y_Actual):
+    global lienzo
+    global grua
+    if letra == "R":  # Rojo Claro.
+        color = "#FF0000"
+
+    elif letra == "G":  # Verde Claro.
+        color = "#00FF00"
+
+    elif letra == "B":  # Azul Claro.
+        color = "#0000FF"
+    elif letra == "":
+        color = "white"
+    else:
+        color = "orange"
+    # Actualiza la matriz de la zona de Suministro 1.
+    grua = lienzo.create_oval(X_Actual, Y_Actual, X_Actual + 40, Y_Actual + 40, width=1, fill=color)
+
+    time.sleep(1.5)
+    ventana.update()
+    return
+
+def colocar_Suministro1(color,X_Destino, Y_Destino):
+    global lienzo
+    global grua
+    if color == "R":  # Rojo Claro.
+        color = "#FF0000"
+
+    elif color == "G":  # Verde Claro.
+        color = "#00FF00"
+
+    elif color == "B":  # Azul Claro.
+        color = "#0000FF"
+    elif color == "":
+        color = "white"
+    
+    # Actualiza la matriz de la zona de Suministro 1 con una caja nueva.
+    lienzo.create_rectangle(X_Destino, Y_Destino, X_Destino + 40, Y_Destino + 40, fill=color)
+    
+    #grua = lienzo.create_oval(X_Actual, Y_Actual, X_Actual + 40, Y_Actual + 40, width=1, fill="orange")
+    
+    return
+
+def actualizar_Carga(letra, X_Destino, Y_Destino):
+    global lienzo
+    global grua
+
+    if letra == "R":  # Rojo Claro.
+        color = "#FF0000"
+
+    elif letra == "G":  # Verde Claro.
+        color = "#00FF00"
+
+    elif letra == "B":  # Azul Claro.
+        color = "#0000FF"
+    else:
+        color = "white"
+
+    # Actualiza la matriz de la zona de Carga.
+    lienzo.create_rectangle(X_Destino, Y_Destino, X_Destino + 40, Y_Destino + 40, width=3, fill=color)
+    
+    time.sleep(1)
+    ventana.update()
+
+    return
+
+def Carga_actual():
+    letras_Carga = []
+
+    archivo_path = filedialog.askopenfilename(filetypes=[("Archivos CSV", "*.csv")])
+
+    if archivo_path:
+        with open(archivo_path, 'r', newline='') as file:
+            lector_csv = csv.reader(file, delimiter=';')
+            for fila in lector_csv:
+                for color in fila:
+                    letras_Carga.append(color)
+    return letras_Carga
+    
+def buscar_espacio():
+    pos_Sum1 = 0
+    while pos_Sum1<25:
+        if lista_Suministro1[pos_Sum1].ocupada == False:
+            return pos_Sum1
+        pos_Sum1 += 1 
+    
+    # Si no hay cajas en suministro se debe de colocar en 0
+##########################################################################################
+
+
+# Función que realiza el Reacomodo de Objetos (Modo de Acomodo 2).
+def acomodo_Cajas_2():
+    """
+    Algoritmo de acomodo 2
+    """
+    global lista_Suministro1  # Ya está inicializada en crear_Matriz_S1_vacio
+    global lista_Carga 
+    global lienzo     
+
+    boton_Iniciar.destroy()
+    # Se sube la carga actual
+    lista_act = Carga_actual()
+
+    Pos_act = 0 
+    pintar_Matriz_CargaActual(lienzo, lista_act)  
+
+    while Pos_act < 25:
+        
+        # Mover a posición en X y Y para la pos_act
+        
+        X_destino = lista_Carga[Pos_act].posx
+        Y_destino =  lista_Carga[Pos_act].posy
+        mover_X_Interfaz(X_destino)
+
+        mover_Y_Interfaz(Y_destino)
+
+        # Escanea
+        Escaneo = lista_act[Pos_act] # Función de escanear QR
+        color_act = Escaneo  # Es el color escaneado en la posición actual
+        agarre_grua(color_act, X_Actual, Y_Actual)  #Simula que lo agarra
+
+        color_des = lista_Carga[Pos_act].color
+
+        if (color_des == color_act):
+            # Se deja ahí, no agarra la caja
+            lista_Carga[Pos_act].colocada = True
+            agarre_grua("n", X_Actual, Y_Actual)
+
+            # print("No se mueve, la caja para la posición ",Pos_act," ya está colocada")
+            actualizar_Carga(color_act, X_destino, Y_destino)  # Se actualiza la interfaz
+            
+        else:
+            colocada_ant = False  # Para validar si se colocó en pos ant en carga 
+            if Pos_act!=0:
+                colocada_ant = False  # Para validar si se colocó en pos ant en carga   
+                for i in list(range(Pos_act)):
+                    if (lista_Carga[i].color == color_act and colocada_ant == False and lista_Carga[i].colocada == False):
+                        # Se busca dejar la caja escaneada en una posición anterior
+                        # Microprocesador
+                        # Agarra la caja (Bajar_garra= ON -> imán = ON  -> Subir_garra=ON) y moverse a la posición i
+                        # Bajar_garra(True)
+                        # Prender_iman(True)
+                        # Subir_garra (True)
+                        # Mov_x(lista_carga[i].posx)) # Para moverse en X
+                        # Mov_y(lista_carga[i].posy)) # Para moverse en Y 
+                        # Bajar_garra(True)
+                        # Prender_iman(False)**
+                        # Subir_garra (True)
+                        actualizar_Carga("w", X_destino, Y_destino)  # Se coloca cuadro blanco
+                        ventana.update()
+
+                        agarre_grua(color_act, X_Actual, Y_Actual)
+                        X_destino = lista_Carga[i].posx
+                        Y_destino =  lista_Carga[i].posy
+                        mover_X_Interfaz(X_destino)
+
+                        mover_Y_Interfaz(Y_destino)
+
+                        colocada_ant = True
+                        lista_Carga[i].colocada = True
+
+                        actualizar_Carga(color_act, X_destino, Y_destino)  # Se coloca el cuadrado, grua naranja
+                        agarre_grua("naranja", X_destino, Y_destino) # Se coloca la grúa naranja
+
+                        lista_act[i] = lista_Carga[i].color
+                        lista_act[Pos_act] = "" # Se vacía
+                        lista_act[i] = lista_Carga[i].color
+                        # print("Se mueve la caja de la posición", Pos_act, " a ", i)
+                        
+                        
+             # No hay espacios anteriores, se debe dejar la caja en suministro
+            if (colocada_ant == False):
+                # Crea el objeto suministro y lo registra en la lista de suministro
+                #j = len(lista_Suministro1) # Para saber cual posición física de suministro debe ir
+                #sum_x = posxf_sum[j]
+                #sum_y = posyf_sum[j]
+                #new_sum = Suministro(0,0,color_act, True) 
+                #lista_Suministro1.append(new_sum)
+
+                # Se busca el primer espacio en suministro vacío
+                espacio = buscar_espacio()
+                actualizar_Carga("w",X_destino,Y_destino)  # Se pone en blanco
+                agarre_grua(color_act,X_Actual,Y_Actual)
+
+                #agarre_grua(color_act,X_Actual,Y_Actual) # Se pone la grua del color de la caja q agarró
+                lista_act[Pos_act] = "-" # Se vacía
+
+                X_destino = lista_Suministro1[espacio].posx
+                Y_destino =  lista_Suministro1[espacio].posy
+
+                mover_X_Interfaz(X_destino)
+
+                mover_Y_Interfaz(Y_destino)
+
+                colocar_Suministro1(color_act,X_destino, Y_destino)  # Se coloca la caja
+                agarre_grua("n",X_Actual,Y_Actual)
+
+                #actualizar_Suministro1(X_destino,Y_destino)
+                lista_Suministro1[espacio].color = color_act
+                lista_Suministro1[espacio].ocupada = True
+
+                #Aquí la grua se pone amarilla
+                """
+                # Se mueve físicamente al lugar sum_x y sum_y
+                # Agarra la caja (Bajar_garra= ON -> imán = ON  -> Subir_garra=ON) y moverse a la posición i
+                # Bajar_garra(True)
+                # Prender_iman(True)
+                # Subir_garra (True)
+                # Mov_x(lista_sumin[i].posx)) # Para moverse en X
+                # Mov_y(lista_sumin[i].posy)) # Para moverse en Y 
+                # Bajar_garra(True)
+                # Prender_iman(False)
+                # Subir_garra (True)
+                """
+
+
+            # Busca si en SUMINISTRO hay cajas con el color deseado para la Pos_act
+            if (len(lista_Suministro1) != 0):
+                for c in list(range((len(lista_Suministro1)))):
+                    if (lista_Suministro1[c].color == color_des and lista_Carga[Pos_act].colocada == False and lista_Suministro1[c].ocupada == True):
+                        # Sí hay cajas con el color deseado para la posción actual en carga
+                        # Debe ir por la caja en suministro y colocarla en Pos_act
+                        """
+                        # Yendo por la caja a suministro
+                        # Agarra la caja (Bajar_garra= ON -> imán = ON  -> Subir_garra=ON) y moverse a la posición i
+                        # Bajar_garra(False)
+                        # Prender_iman(False)
+                        # Subir_garra (False)
+                        # Mov_x(lista_sumin[c].posx)) # Para moverse en X
+                        # Mov_y(lista_sumin[c].posy)) # Para moverse en Y 
+                        # Bajar_garra(False)
+                        # Prender_iman(False)
+                        # Subir_garra (False)
+
+                        #Yendo otra vez a la Pos_act en carga
+                        # Agarra la caja (Bajar_garra= ON -> imán = ON  -> Subir_garra=ON) y moverse a la posición i
+                        # Bajar_garra(True)
+                        # Prender_iman(True)
+                        # Subir_garra (True)
+                        # Mov_x(lista_carga[Pos_act].posx)) # Para moverse en X
+                        # Mov_y(lista_carga[Pos_act].posy)) # Para moverse en Y 
+                        # Bajar_garra(True)
+                        # Prender_iman(False)
+                        # Subir_garra (True)
+                        """
+                        # C es la posicion de suministro que debe ir
+                        X_destino = lista_Suministro1[c].posx
+                        Y_destino =  lista_Suministro1[c].posy
+
+                        mover_X_Interfaz(X_destino)
+
+                        mover_Y_Interfaz(Y_destino)
+
+                        colocar_Suministro1("",X_destino, Y_destino)  # Se quita la caja
+                        agarre_grua(color_des,X_Actual,Y_Actual)
+
+                        
+                        lista_act[Pos_act] = lista_Carga[Pos_act].color
+                        lista_Suministro1[c].ocupada = False
+                        lista_Suministro1[c].color = " "
+                        # Se deja en carga
+
+                        X_destino = lista_Carga[Pos_act].posx
+                        Y_destino =  lista_Carga[Pos_act].posy
+
+                        mover_X_Interfaz(X_destino)
+
+                        mover_Y_Interfaz(Y_destino)
+
+                        lista_Carga[Pos_act].colocada = True
+                        lista_act[Pos_act] = lista_Carga[Pos_act].color
+                        actualizar_Carga(color_des,X_destino,Y_destino)
+                        agarre_grua("n",X_Actual,Y_Actual)
+
+                        break  # Se sale del ciclo For
+
+
+        Pos_act += 1
+
+    # Ya acabó de revisar toda la carga, debe revisar si quedan espacios en carga sin colocar
+
+    faltan = 0
+    for i in list(range(25)):
+        if lista_Carga[i].colocada == False:
+            faltan += 1
+
+    if faltan == 0:
+        print("Ha finalizado el acomodo.")
+
+        return
+    else:
+        for j in list(range(25)):
+            if lista_Carga[j].colocada == False:  # Condición que no está colocada
+                color_des = lista_Carga[j].color
+                listo = False  # Verifica cuando ya se colocó
+
+                for k in list(range((len(lista_Suministro1)))): 
+                    # Revisa si hay cajas con el color en suministro
+
+                    if (lista_Suministro1[k].color == color_des and lista_Suministro1[k].ocupada == True and listo == False):
+                        # Sí hay cajas con el color deseado en sum para la posción actual (j) en carga
+                        # Debe ir por la caja en suministro y colocarla en Pos_act (j) en carga
+
+                        # Yendo por la caja a suministro
+                        # Bajar_garra(False)
+                        # Prender_iman(False)
+                        # Subir_garra (False)
+                        # Mov_x(lista_sumin[k].posx)) # Para moverse en X
+                        # Mov_y(lista_sumin[k].posy)) # Para moverse en Y 
+                        # Bajar_garra(False)
+                        # Prender_iman(False)
+                        # Subir_garra (False)
+                        lista_Suministro1[k].ocupada = False
+
+                        #Yendo otra vez a la Pos_act en carga
+                        # Agarra la caja (Bajar_garra= ON -> imán = ON  -> Subir_garra=ON) y moverse a la posición i
+                        # Bajar_garra(True)
+                        # Prender_iman(True)
+                        # Subir_garra (True)
+                        # Mov_x(lista_carga[j].posx)) # Para moverse en X
+                        # Mov_y(lista_carga[j].posy)) # Para moverse en Y 
+                        # Bajar_garra(True)
+                        # Prender_iman(False)
+                        # Subir_garra (True)
+                        lista_Carga[j].colocada = True
+                        listo = True
+                        lista_act[j] = lista_Carga[j].color
+                                            
+                if listo == False:
+                    # No hay cajas en suministro para colocar en carga
+                    # Caso: Ni modo
+                    #lista_carga[j].colocada = True
+                    print("Para la posición ", j, " para el color ", lista_Carga[j].color, " no hay cajas disponibles")
+
+        mensaje_Interfaz.config(text="Volviendo a la posición inicial.")
+        X_Destino = tam_Bases
+        Y_Destino = tam_Bases
+        mover_X_Interfaz(X_Destino)
+
+        mover_Y_Interfaz(Y_Destino)
+        mensaje_Interfaz.config(text="Ha finalizado el acomodo.")
+        return
+
+# Función que realiza la lectura del QR y retorna el color de la caja o si es un espacio vacío (sin caja).
 def leer_QR():
     # Creamos la videocaptura
     cap = cv2.VideoCapture(0)
@@ -732,9 +1111,9 @@ def leer_QR():
                 break
 
             #Formato para los códigos:
-            #Espacio Vacio: 86
-            if tipo == 86:  # V->86, Espacio Vacio
-                color = "V"
+            #Espacio Libre: 76
+            if tipo == 76:  # L->76, Espacio Libre
+                color = "L"
                 leyo = True
                 break
 
@@ -754,13 +1133,43 @@ def mover_X_Interfaz(X_Destino):
     # Movimiento horizontal.
     movimiento_X = X_Destino - X_Actual
 
+    if movimiento_X > 0:
+        mov = 4
+    elif movimiento_X < 0:
+        mov = -4
+
     # Si ya está en la misma posición en X que el destino.
     if (X_Actual == X_Destino):
         movimiento_X = 0
 
-    lienzo.move(grua, movimiento_X, 0)
+    while X_Actual != X_Destino:
+
+        lienzo.move(grua, mov, 0)
+        X_Actual = X_Actual + mov
+
+        time.sleep(0.1)
+        ventana.update()
+
+        if (movimiento_X > 0 and X_Actual >= X_Destino):
+            movimiento_X = X_Destino - X_Actual
+            lienzo.move(grua, movimiento_X, 0)
+            X_Actual = X_Destino
+
+            time.sleep(0.1)
+            ventana.update()
+            break
+
+        elif (movimiento_X < 0 and X_Actual <= X_Destino):
+            movimiento_X = X_Destino - X_Actual
+            lienzo.move(grua, movimiento_X, 0)
+            X_Actual = X_Destino
+
+            time.sleep(0.1)
+            ventana.update()
+            break
+
+    #lienzo.move(grua, movimiento_X, 0)
     X_Actual = X_Destino
-    ventana.update()
 
     return
 
@@ -772,11 +1181,40 @@ def mover_Y_Interfaz(Y_Destino):
     # Movimiento vertical.
     movimiento_Y = Y_Destino - Y_Actual
     
+    if movimiento_Y > 0:
+        mov = 4
+    elif movimiento_Y < 0:
+        mov = -4
+    
     # Si ya está en la misma posición en Y que el destino.
     if (Y_Actual == Y_Destino):
         movimiento_Y = 0
 
-    lienzo.move(grua, 0, movimiento_Y)
+    while Y_Actual != Y_Destino:
+
+        lienzo.move(grua, 0, mov)
+        Y_Actual = Y_Actual + mov
+
+        time.sleep(0.1)
+        ventana.update()
+
+        if (movimiento_Y > 0 and Y_Actual >= Y_Destino):
+            movimiento_Y = Y_Destino - Y_Actual
+            lienzo.move(grua, 0, movimiento_Y)
+            Y_Actual = Y_Destino
+
+            time.sleep(0.1)
+            ventana.update()
+            break
+        elif (movimiento_Y < 0 and Y_Actual <= Y_Destino):
+            movimiento_Y = Y_Destino - Y_Actual
+            lienzo.move(grua, 0, movimiento_Y)
+            Y_Actual = Y_Destino
+
+            time.sleep(0.1)
+            ventana.update()
+            break
+
     Y_Actual = Y_Destino
     ventana.update()
     return
@@ -796,18 +1234,11 @@ def mover_Motores(motor, X_Actual, X_Destino):
     mensaje_Motores = microProces.readline().decode()
 
 # Actualiza el color de cada espacio del suministro 1 según va posicionando cada caja.
-def limpiar_Suministro1(X_Destino, Y_Destino, elemento):
+def actualizar_Suministro1(X_Destino, Y_Destino):
     global lienzo
-    global grua
-
-    color = elemento.color
 
     # Pinta el espacio de suministro de color blanco debido a que la grua recoge la caja.
-    # En caso de que recoja una caja, la grúa también se pinta del color de la caja.
-    color = ident_Color(elemento.color)
     lienzo.create_rectangle(X_Destino, Y_Destino, X_Destino + 40, Y_Destino + 40, fill="white")
-
-    grua = lienzo.create_oval(X_Actual, Y_Actual, X_Actual + 40, Y_Actual + 40, width=1, fill=color)
 
     return
     
