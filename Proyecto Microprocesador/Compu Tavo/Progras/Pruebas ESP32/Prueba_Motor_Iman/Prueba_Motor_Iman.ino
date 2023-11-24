@@ -27,10 +27,11 @@ const int Iman = 12;
 // 0 = Apagado.
 // 1 = Dirección Horaria.
 // 2 = Dirección Antihoraria.
-volatile int activarMotor = 0;
+int activarMotor = 0;
 
 volatile int pasos = 0;
 int estado = 0;
+int iman = 0;
 
 void setup() {
   Serial.begin(9600); // Inicia la comunicación serial.
@@ -56,7 +57,6 @@ void setup() {
   // Inicializa el pin del Imán como salida.
   pinMode(Iman, OUTPUT);
   digitalWrite(Iman, LOW);
-  
   // Configura la interrupción para que pare el movimiento cuando va hacia abajo.
   attachInterrupt(digitalPinToInterrupt(final_Carrera_A), stop_Abajo, RISING);
   // Configura la interrupción para que pare el movimiento cuando va hacia arriba.
@@ -77,8 +77,8 @@ void loop() {
         Motor_Y.step(pasos);
       }
       else if (comando == 'Z'){
-        //pasos = 1;
-        activarMotor = 1;
+        // Se quiere usar el motor Z
+        activarMotor = 1;  // Para empezar a bajar
       }
       // Envía señal de finalización a Python.
       Serial.println("Motor_Listo");
@@ -87,58 +87,50 @@ void loop() {
   
   if (activarMotor == 0) {
     // Apaga el motor.
+    digitalWrite(Iman, LOW);
     digitalWrite(motor_Pin_A, LOW);
     digitalWrite(motor_Pin_B, LOW);
     ledcWrite(pwmChannel, dutyCycle);
     digitalWrite(Iman, LOW);
-    estado = 0;
+    estado = 3;
   }
   else if (activarMotor == 1) {
     // Activa el motor en dirección Horaria.
     digitalWrite(motor_Pin_A, HIGH);
     digitalWrite(motor_Pin_B, LOW);
     ledcWrite(pwmChannel, dutyCycle);
-    Serial.println("esperando stop abajo");
-    estado = 0;
-    delay(5000);
-  
-   
-    
+    delay(10000); // dura 4 segundos
+    //estado = 0;
+    activarMotor = 2;
   }
-  else if (activarMotor == 2) {
-    //digitalWrite(Iman, HIGH);
-    /*
-    delay (2000); // Espera 2 segundos.
-    if (pasos == 1) {
-    // Activa el imán.
-      digitalWrite(Iman, HIGH);
-    }
-
-    else if (pasos == 2) {
-    // Desactiva el imán.
-      digitalWrite(Iman, LOW);
-    }
-    */
-    delay (2000); //Espera 3 segundos.
+  else if(activarMotor == 2){
+    // Activar iman
+    digitalWrite(motor_Pin_A, LOW);
+    digitalWrite(motor_Pin_B, LOW);
+    ledcWrite(pwmChannel, dutyCycle);
+    delay(1000);
     digitalWrite(Iman, HIGH);
-    delay(2000); // Espera 2 s antes de subir.
-    // Ahora sube el motor.
+    delay(2000); // Espera 2 s antes de subir
     activarMotor = 3;
-    
   }
+
   else if (activarMotor == 3) {
-    // Subir el motor, rotación antihoraria.
-     // Espera 2 s antes de subir.
-    // Ahora sube el motor.
-    
+    //delay (3000); //Espera 3 segundos
+    // Activa el motor en dirección AntiHoraria
+
     digitalWrite(motor_Pin_A, LOW);
     digitalWrite(motor_Pin_B, HIGH);
     ledcWrite(pwmChannel, dutyCycle);
-    estado = 1;
-    
+
+    delay(10000); // dura 4 segundos
+    activarMotor = 0; //Apaga el motor
+
+    //activarMotor == 0;
+    // Apaga el motor.
+    //digitalWrite(motor_Pin_A, LOW);
+    //digitalWrite(motor_Pin_B, LOW);
+    //ledcWrite(pwmChannel, dutyCycle);
   }
-
-
 }
 
 void stop_Abajo() {
@@ -147,7 +139,7 @@ void stop_Abajo() {
     digitalWrite(motor_Pin_A, LOW);
     digitalWrite(motor_Pin_B, LOW);
     ledcWrite(pwmChannel, dutyCycle);
-    Serial.println("stop abajo");
+    estado = 1;
     // Indica que funcione el iman
     activarMotor = 2;
   }
@@ -159,9 +151,8 @@ void stop_Arriba() {
     digitalWrite(motor_Pin_A, LOW);
     digitalWrite(motor_Pin_B, LOW);
     ledcWrite(pwmChannel, dutyCycle);
-    Serial.println("stop arriba");
-    estado = 0;
     // Indica que el motor se apague.
     activarMotor = 0;
+    estado = 0;
   }
 }

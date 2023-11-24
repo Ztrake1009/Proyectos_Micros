@@ -31,7 +31,19 @@ void setup() {
 }
 
 void loop() {
+  /*
+  if (final_Carrera_A) {    
+    Serial.println(1);
+  }
+
+  if (final_Carrera_B) {    
+    Serial.println(2);
+  }
+  */
+  
   if (activarMotor == 1) {    
+    Serial.println(1);
+    /*
     delay(5000); // Espera 5 segundos
 
     // Activar o desactivar el imán
@@ -40,32 +52,28 @@ void loop() {
     digitalWrite(relay_A, HIGH);
     digitalWrite(relay_B, LOW);
     digitalWrite(2, HIGH);
+    //Serial.println(1);
+    */
   }
-
+  
   else if (activarMotor == 2) {
     // Apaga el motor
-    
+    /*
     digitalWrite(relay_A, LOW);
     digitalWrite(relay_B, LOW);
     digitalWrite(2, LOW);
-
-    /*
-    delay(5000); // Espera 5 segundos
-
-    // Activar o desactivar el imán
-
-    // Activa el motor
-    digitalWrite(relay_A, LOW);
-    digitalWrite(relay_B, HIGH);
     */
+    Serial.println(0);
+
   }
+  
 }
 
 
 void stop_Abajo() {
   // Apaga el motor
-  digitalWrite(relay_A, LOW);
-  digitalWrite(relay_B, LOW);
+  //digitalWrite(relay_A, LOW);
+  //digitalWrite(relay_B, LOW);
 
   //delay (5000);
 

@@ -16,6 +16,7 @@ def iniciar():
     hilo1 = threading.Thread(target=mover_Motores("X", pasos))
     hilo3 = threading.Thread(target=mover_X_Interfaz(X_Destino))
 
+
     print("Moviendo el Motor X y la interfaz en X")
     # creamos la barrera para 2 hilos
     barrera = threading.Barrier(2)
@@ -26,6 +27,11 @@ def iniciar():
     # Espera a que ambos hilos terminen.
     hilo1.join()
     hilo3.join()
+
+    # Mueve el Motor Z.
+    #hilo5 = threading.Thread(target=mover_Motores("Z", 1))
+    #hilo5.start()
+    #hilo5.join()
 
     # Movimiento hacia abajo.
     Y_Destino = 400 - radio
@@ -41,7 +47,6 @@ def iniciar():
     # Espera a que ambos hilos terminen.
     hilo2.join()
     hilo4.join()
-
 
     pasos = -1600
     
@@ -60,6 +65,11 @@ def iniciar():
     # Espera a que ambos hilos terminen.
     hilo1.join()
     hilo3.join()
+
+    # Mueve el Motor Z.
+    #hilo5 = threading.Thread(target=mover_Motores("Z", 2))
+    #hilo5.start()
+    #hilo5.join()
 
     # Movimiento hacia arriba.
     Y_Destino = 0
@@ -86,9 +96,9 @@ def mover_X_Interfaz(X_Destino):
     movimiento_X = X_Destino - X_Actual
 
     if movimiento_X > 0:
-        mov = 10
+        mov = 20
     elif movimiento_X < 0:
-        mov = -10
+        mov = -20
 
     # Si ya está en la misma posición en X que el destino.
     if (X_Actual == X_Destino):
@@ -133,9 +143,9 @@ def mover_Y_Interfaz(Y_Destino):
     movimiento_Y = Y_Destino - Y_Actual
     
     if movimiento_Y > 0:
-        mov = 10
+        mov = 20
     elif movimiento_Y < 0:
-        mov = -10
+        mov = -20
     
     # Si ya está en la misma posición en Y que el destino.
     if (Y_Actual == Y_Destino):
